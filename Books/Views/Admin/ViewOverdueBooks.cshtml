@@ -1,0 +1,32 @@
+﻿
+@{
+}
+<h1>Lista książek z opóźnieniem w zwrocie</h1>
+
+<div class="row">
+    <div class="col-md-12">
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th>Tytuł</th>
+                    <th>Wypożyczający</th>
+                    <th>Data wypożyczenia</th>
+                    <th>Data zwrotu</th>
+                    <th>Opóźnienie (dni)</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var borrow in Model)
+                {
+                    <tr>
+                        <td>@borrow.Book.Title</td>
+                        <td>@borrow.Borrower.FirstName @borrow.Borrower.LastName</td>
+                        <td>@borrow.BorrowDate.DateString()</td>
+                        <td>@borrow.ReturnDate.Value.DateString()</td>
+                        <td>@borrow.DaysOverdue</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>

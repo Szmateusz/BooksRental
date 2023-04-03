@@ -1,0 +1,33 @@
+﻿
+@{
+}
+<h1>Lista użytkowników</h1>
+
+<div class="row">
+    <div class="col-md-12">
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th>Imię i nazwisko</th>
+                    <th>Email</th>
+                    <th>Rola</th>
+                    <th>Akcje</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var user in Model)
+                {
+                    <tr>
+                        <td>@user.FirstName @user.LastName</td>
+                        <td>@user.Email</td>
+                        <td>@user.Role</td>
+                        <td>
+                            <a href="@Url.Action("EditUser", "Admin", new { id = user.Id })">Edytuj</a> |
+                            <a href="@Url.Action("DeleteUser", "Admin", new { id = user.Id })">Usuń</a>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>

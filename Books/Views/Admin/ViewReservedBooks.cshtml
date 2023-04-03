@@ -1,0 +1,31 @@
+﻿
+@{
+}
+
+<h1>Lista zarezerwowanych książek</h1>
+
+<div class="row">
+    <div class="col-md-12">
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th>Tytuł</th>
+                    <th>Rezerwujący</th>
+                    <th>Data rezerwacji</th>
+                    <th>Data odbioru</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var reservation in Model)
+                {
+                    <tr>
+                        <td>@reservation.Book.Title</td>
+                        <td>@reservation.Reserver.FirstName @reservation.Reserver.LastName</td>
+                        <td>@reservation.ReservationDate.DateString()</td>
+                        <td>@(reservation.PickupDate.HasValue ? reservation.PickupDate.Value.DateString() : "Nie odebrano")</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>

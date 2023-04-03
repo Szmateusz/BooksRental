@@ -1,0 +1,70 @@
+﻿
+@{
+}
+
+<h1>Panel administratora</h1>
+
+<div class="list-group">
+    <a href="@Url.Action("Index")" class="list-group-item list-group-item-action">Książki</a>
+    <a href="@Url.Action("CreateBook")" class="list-group-item list-group-item-action">Dodaj książkę</a>
+    <a href="@Url.Action("Rentals")" class="list-group-item list-group-item-action">Wypożyczenia</a>
+</div>
+
+<div class="card">
+    <div class="card-header">Książki</div>
+    <div class="card-body">
+       
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>Tytuł</th>
+                    <th>Autor</th>
+                    <th>Dostępne egzemplarze</th>
+                    <th>Akcje</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var book in Model.Books)
+                {
+                    <tr>
+                        <td>@book.Title</td>
+                        <td>@book.Author</td>
+                        <td>@(book.AvailableCopies > 0 ? book.AvailableCopies.ToString() : "Brak")</td>
+                        <td>
+                            <a asp-action="EditBook" asp-route-id="@book.Id">Edytuj</a>
+                            <a asp-action="DeleteBook" asp-route-id="@book.Id" onclick="return confirm('Czy na pewno chcesz usunąć tę książkę?')">Usuń</a>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<div class="card mt-3">
+    <div class="card-header">Wypożyczenia</div>
+    <div class="card-body">
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>Książka</th>
+                    <th>Użytkownik</th>
+                    <th>Data wypożyczenia</th>
+                    <th>Data zwrotu</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var checkOut in Model.CheckOuts)
+                {
+                    <tr>
+                        <td>@checkOut.Book.Title</td>
+                        <td>@checkOut.User.UserName</td>
+                        <td>@checkOut.CheckOutDate</td>
+                        <td>@(checkOut.ReturnDate.HasValue ? checkOut.ReturnDate.Value.ToShortDateString() : "Nie zwrócona")</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+
+</div>

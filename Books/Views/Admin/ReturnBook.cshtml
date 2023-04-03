@@ -1,0 +1,14 @@
+﻿
+@{
+}
+<h1>Zwróć książkę</h1>
+
+<form method="post">
+    <input type="hidden" name="BookId" value="@Model.BookId">
+    <input type="hidden" name="BorrowerId" value="@Model.BorrowerId">
+    <div class="form-group">
+        <label for="returnDate">Data zwrotu</label>
+        <input type="date" class="form-control" id="returnDate" name="ReturnDate" required>
+    </div>
+    <button type="submit" class="btn btn-primary">Zwróć książkę</button>
+</form>
