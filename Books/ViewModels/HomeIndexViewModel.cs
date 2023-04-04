@@ -1,4 +1,6 @@
-﻿namespace Books.Models
+﻿using Books.Models;
+
+namespace Books.ViewModels
 {
     public class IndexViewModel
     {

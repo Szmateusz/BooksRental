@@ -1,4 +1,4 @@
-﻿@model IndexViewModel
+﻿@model HomeIndexViewModel
 @{
 
 }
@@ -10,7 +10,7 @@
 
 
 
-    <form asp-action="Index" method="post">
+    <form asp-action="Search" asp-asp-controller="Offer" method="post">
         <input type="text" name="search" placeholder="Wyszukaj książkę">
         <button type="submit">Szukaj</button>
     </form>
@@ -21,40 +21,56 @@
 
 <section class="slider">
     <div class="slide_item">
-        <img src="" alt="item" />
-        @if(Model.SearchedBooks!= null){
-            @foreach (var book in Model.SearchedBooks)
-            {
-                <li>@book.Title</li>
-            }
-        }
-       
+        <img src="" alt="item" />     
     </div>
 </section>
 
 <section >
-   <div>
+  
     <h2>Polecane książki:</h2>
-    <ul>
-            @if(Model.RecommendedBooks!=null){
-            @foreach (var book in Model.RecommendedBooks)
-            {
-                <li>@book.Title</li>
-            }
-            }
-        
-    </ul>
-</div>
-</section>
-<section>
     <div>
+        <ul>
+                @if(Model.RecommendedBooks!=null){
+                    @foreach (var book in Model.RecommendedBooks)
+                    {
+                        <li>
+                            <div class="BookBox">
+                                <h3>@book.Title</h3>
+
+                                <p><img src="~/lib/image/@book.ImageUrl"/></p>
+
+                                <p>@book.Author</p>
+                                <p>@book.Description</p>
+                                <p>@book.Publisher  -  @book.Year</p>
+                            </div>
+                        </li>
+                    }
+                }
+        
+        </ul>
+    </div>
+</section>
+
+<section>
+    
         <h2>Najnowsze książki:</h2>
+    <div>
         <ul>
             @if(Model.LatestBooks!=null){
-            @foreach (var book in Model.LatestBooks)
-            {
-                <li>@book.Title (@book.Year)</li>
-            }
+                @foreach (var book in Model.LatestBooks)
+                {
+                    <li>
+                        <div class="BookBox">
+                            <h3>@book.Title</h3>
+
+                            <p><img src="~/lib/image/@book.ImageUrl" /></p>
+
+                            <p>@book.Author</p>
+                            <p>@book.Description</p>
+                            <p>@book.Publisher  -  @book.Year</p>
+                        </div>
+                    </li>
+                }
             }
           
         </ul>
