@@ -1,0 +1,32 @@
+﻿@model Book
+
+@{
+}
+
+<h1>@Model.Title</h1>
+<div>
+    <img src="~/lib/images/@Model.ImageUrl" alt="Book image" />
+</div>
+
+<div>
+    <h2>@Model.Author</h2>
+    <h3>@Model.Publisher --  @Model.Year</h3>
+    <h4>@Model.Genre</h4>
+</div>
+<div>
+    <p>@Model.Description</p>
+</div>
+
+<div>
+    <span>Ilość książek: @Model.TotalCopies</span>
+    <span>Dostępna ilość: @Model.AvailableCopies</span>
+   
+      <input type="button"
+         value="Wypożycz"
+           onclick="location.href='@Url.Action("Rent", "Offer", new {id = @Model.Id}))'" />
+
+    <input type="button"
+           value="Zarezeruj"
+           onclick="location.href='@Url.Action("Reserve", "Offer", new {id = @Model.Id})'" />
+</div>
+

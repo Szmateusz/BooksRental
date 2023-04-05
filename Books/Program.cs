@@ -1,11 +1,15 @@
 using Books;
 using Books.Models;
+using Books.Services;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddScoped<IBookRepository, BookRepository>();
-builder.Services.AddScoped<ICheckedOutRepository, CheckedOutRepository>();
+builder.Services.AddScoped<IRentalRepository, RentalRepository>();
+builder.Services.AddScoped<IReserveRepository, ReserveRepository>();
+
 
 builder.Services.AddDbContext<Books.DbContext>(options =>
 {
@@ -16,8 +20,20 @@ builder.Services.AddDbContext<Books.DbContext>(options =>
 builder.Services.AddControllersWithViews();
 
 
+builder.Services.AddIdentity<UserModel, IdentityRole>(options =>
+{
+    options.Password.RequireDigit = false;
+    options.Password.RequireLowercase = false;
+    options.Password.RequiredLength = 2;
+    options.Password.RequireUppercase = false;
+    options.Password.RequireNonAlphanumeric = false;
 
-    var app = builder.Build();
+
+
+}).AddEntityFrameworkStores<Books.DbContext>();
+
+
+var app = builder.Build();
 
 // Configure the HTTP request pipeline.
 if (!app.Environment.IsDevelopment())
@@ -33,6 +49,7 @@ app.UseStaticFiles();
 app.UseRouting();
 
 app.UseAuthorization();
+app.UseAuthentication();
 
 app.MapControllerRoute(
     name: "default",

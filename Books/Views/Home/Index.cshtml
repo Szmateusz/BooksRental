@@ -3,18 +3,17 @@
 
 }
 
-<section class="sec_nav">
-    <a asp-action="Offer">Oferta książek</a>
-    <img src="" alt="logo"/>
+<section class="sec_search">
+
+    @using (Html.BeginForm("Search", "Offer", FormMethod.Post))
+    {
+        @Html.TextBoxFor(x=>x.SearchQuery, new {placeholder = "Wyszukaj książki"})
 
 
+        @Html.DropDownListFor(x => x.Genres, Html.GetEnumSelectList<Genres>(), "Wybierz gatunek")
 
-
-    <form asp-action="Search" asp-asp-controller="Offer" method="post">
-        <input type="text" name="search" placeholder="Wyszukaj książkę">
         <button type="submit">Szukaj</button>
-    </form>
-
+    }
 
 
 </section>

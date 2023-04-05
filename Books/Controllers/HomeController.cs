@@ -1,4 +1,5 @@
 ﻿using Books.Models;
+using Books.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
@@ -22,7 +23,8 @@ namespace Books.Controllers
             var model = new HomeIndexViewModel
             {
                 LatestBooks = latestBooks,
-                RecommendedBooks = recommendedBooks
+                RecommendedBooks = recommendedBooks,
+                
             };
 
             return View(model);
@@ -30,4 +32,6 @@ namespace Books.Controllers
 
     }
 }
+
+
 

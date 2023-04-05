@@ -1,0 +1,52 @@
+﻿@model RegisterModel
+
+@{
+
+    ViewData["Title"] = "Rejestracja";
+    Layout = "_Layout-login";
+
+    var isRegistered = ViewData["isRegistered"];
+    var isPasswordLenght = ViewData["isPasswordLenght"];
+
+
+}
+
+<div id="divlogin">
+    <ul class="list-unstyled components">
+        <li>
+            <a class="nav-link text-white" asp-area="" asp-controller="Account" asp-action="Index">Powrót</a>
+        </li>
+        <li>
+            <a class="nav-link text-white" asp-area="" asp-controller="Account" asp-action="Login">Zaloguj</a>
+        </li>
+    </ul>
+</div>
+
+@using (Html.BeginForm("Register", "Account", FormMethod.Post))
+{
+    @Html.ValidationSummary();
+    
+    <span>Login: </span> @Html.TextBoxFor(x => x.UserName)
+    <br />
+    <span>Hasło: </span> @Html.PasswordFor(x => x.Password)
+    <img id="img" class="icon icon_pointer" src="~/lib/icons/unvisible.png" alt="toggle visible" onclick="togglePassword()" />
+    
+    <span>Imię: </span> @Html.TextBoxFor(x => x.FirstName)
+    <br />
+    
+    <span>Nazwisko: </span> @Html.TextBoxFor(x => x.lastName)
+    <br />
+
+    <span>Data urodzenia: </span> <input asp-for="@Model.DateOfBirth" type="date" asp-format="{0:yyyy-MM-dd}" /> 
+    <br />
+
+    <input type="submit" value="Zarejestruj" />
+}
+@if (isRegistered.Equals(true))
+{
+    <p class="adultInfo">Użytkownik, o tym loginie juz istnieje!</p>
+}
+@if (isPasswordLenght.Equals(false))
+{
+    <p class="adultInfo">Hasło musi zawierać conajmniej 5 znaków!</p>
+}

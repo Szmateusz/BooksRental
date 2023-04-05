@@ -1,4 +1,6 @@
-﻿namespace Books.Models
+﻿using Books.Models;
+
+namespace Books.Services
 {
     public interface IBookRepository
     {

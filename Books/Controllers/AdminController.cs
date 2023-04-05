@@ -1,4 +1,5 @@
 ﻿using Books.Models;
+using Books.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
@@ -8,10 +9,10 @@ namespace Books.Controllers
     public class AdminController : Controller
     {
         private readonly IBookRepository _bookRepository;
-        private readonly ICheckedOutRepository _checkOutRepository;
+        private readonly IRentalRepository _checkOutRepository;
         public readonly DbContext _context;
 
-        public AdminController(IBookRepository bookRepository, ICheckedOutRepository checkOutRepository, DbContext context)
+        public AdminController(IBookRepository bookRepository, IRentalRepository checkOutRepository, DbContext context)
         {
             _bookRepository = bookRepository;
             _checkOutRepository = checkOutRepository;
