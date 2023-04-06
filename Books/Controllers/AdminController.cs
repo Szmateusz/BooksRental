@@ -1,21 +1,23 @@
 ﻿using Books.Models;
 using Books.Services;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
 
 namespace Books.Controllers
 {
+    [Authorize(Roles = "admin")]
     public class AdminController : Controller
     {
         private readonly IBookRepository _bookRepository;
-        private readonly IRentalRepository _checkOutRepository;
+        private readonly IRentalRepository _rentalRepository;
         public readonly DbContext _context;
 
-        public AdminController(IBookRepository bookRepository, IRentalRepository checkOutRepository, DbContext context)
+        public AdminController(IBookRepository bookRepository, IRentalRepository rentalRepository, DbContext context)
         {
             _bookRepository = bookRepository;
-            _checkOutRepository = checkOutRepository;
+            _rentalRepository = rentalRepository;
             _context = context;
         }
 
@@ -57,14 +59,54 @@ namespace Books.Controllers
             return RedirectToAction("Index");
         }
 
-        public IActionResult CheckOuts()
+        public IActionResult Rentals()
         {
-            var checkOuts = _checkOutRepository.GetAllCheckedOutBooks();
-            return View(checkOuts);
+            var rentals = _rentalRepository.GetAllRentalBooks().ToList();
+
+            return View(rentals);
         }
 
-        public IActionResult BorrowBook()
+        [HttpGet]
+        public IActionResult BorrowBook(int bookId)
         {
+            var book = _bookRepository.GetBookById(bookId);
+
+            var users = _context.Users.ToList();
+
+            var model = new BorrowBookModel
+            {
+                Users = users,
+
+                Rental = new Rental
+                {
+                    BookId = bookId,
+                    Book = book
+
+
+                }
+            };
+
+            return View(model);
+        }
+        [HttpPost]
+        public IActionResult BorrowBook(BorrowBookModel model,DateTime date)
+        {
+            var rental = new Rental
+            {
+                RentalDate = DateTime.Now,
+                BookId = model.Rental.BookId,
+                UserId = model.Users.First().Id,
+                DueDate = date
+                
+            };
+
+            var book = model.Rental.Book;
+            book.AvailableCopies += -1;
+
+            _bookRepository.UpdateBook(book);
+
+            _rentalRepository.AddRental(rental);
+
             return View();
         }
 

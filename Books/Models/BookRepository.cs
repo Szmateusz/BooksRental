@@ -16,6 +16,10 @@ namespace Books.Models
         {
             return _context.Books.ToList();
         }
+        public IEnumerable<Book> GetAllAvaibleBooks()
+        {
+            return _context.Books.Where(b=>b.AvailableCopies>0).ToList();
+        }
 
         public Book GetBookById(int id)
         {

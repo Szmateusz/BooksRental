@@ -109,6 +109,7 @@ namespace Books.Controllers
         {
             
             var userId = _userManager.GetUserId(User);
+
             var book = _context.Books.SingleOrDefault(b => b.Id == id);
 
             if (book.AvailableCopies < 1)
@@ -137,18 +138,33 @@ namespace Books.Controllers
         {
             var userId = _userManager.GetUserId(User);
 
-            var rentals = _rentalRepository.GetAllUserRentalBooks(userId);
+            var CurrentRentals = _rentalRepository.GetAllUserCurrentRentalBooks(userId).ToList();
+            var HistoryRentals = _rentalRepository.GetAllUserRentalBooks(userId).ToList();
+            var OverdueRentals = _rentalRepository.GetAllUserOverdueRentalBooks(userId).ToList();
 
-            return View(rentals);
+            var model = new UserRentalsViewModel
+            {
+                CurrentRentals = CurrentRentals,
+                RentalsHistory = HistoryRentals,
+                RentalsOverdue = OverdueRentals
+            };
+
+            return View(model);
 
         }
         public IActionResult UserReserves()
         {
             var userId = _userManager.GetUserId(User);
 
-            var reserves = _reserveRepository.GetAllUserReserveBooks(userId);
+            var reserves = _reserveRepository.GetAllUserReserveBooks(userId).ToList();
 
             return View(reserves);
+        }
+        public IActionResult DeleteUserReserve(int id)
+        {         
+            _reserveRepository.DeleteReserve(id);
+
+            return RedirectToAction("UserReserves","Offer");
         }
     }
 }

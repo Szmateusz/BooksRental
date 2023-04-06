@@ -1,0 +1,121 @@
+﻿@model UserRentalsViewModel
+
+@{
+  
+}
+
+<section>
+    <h1>Aktualne wypożyczenia</h1>
+
+    <h2>Liczba aktualnie wypożyczonych książek: @Model.CurrentRentals.Count</h2>
+
+    <table>
+        <thead>
+            <tr>
+                <td>Tytuł</td>
+                <td>Autor</td>
+                <td>Gatunek</td>
+                <td>Wydawca</td>
+                <td>Data wypożyczenia</td>
+                <td>Termin zwrotu</td>
+            </tr>
+        </thead>
+        <tbody>
+            @if (Model.CurrentRentals != null)
+            {
+                @foreach (var rental in Model.CurrentRentals)
+                {
+                    <a class="text-dark" asp-area="" asp-controller="Offer" asp-action="Details" asp-route-id="@rental.BookId">
+                        <tr>
+                            <td><img src="~/lib/images/@rental.Book.ImageUrl" alt="Book image" /></td>
+                            <td>@rental.Book.Title</td>
+                            <td>@rental.Book.Author</td>
+                            <td>@rental.Book.Genre</td>
+                            <td>@rental.Book.Publisher</td>
+                            <td>@rental.RentalDate</td>
+                            <td>@rental.DueDate</td>
+                        </tr>
+                    </a>
+
+                }
+            }
+        </tbody>
+    </table>
+</section>
+<section>
+    <h1>Zaległe książki</h1>
+
+    <h2>Liczba zaległych książek: @Model.RentalsOverdue.Count</h2>
+
+    <table>
+        <thead>
+            <tr>
+                <td>Tytuł</td>
+                <td>Autor</td>
+                <td>Gatunek</td>
+                <td>Wydawca</td>
+                <td>Data wypożyczenia</td>
+                <td>Termin zwrotu</td>
+            </tr>
+        </thead>
+        <tbody>
+            @if (Model.RentalsOverdue != null)
+            {
+                @foreach (var rental in Model.RentalsOverdue)
+                {
+                    <a class="text-dark" asp-area="" asp-controller="Offer" asp-action="Details" asp-route-id="@rental.BookId">
+                        <tr>
+                            <td><img src="~/lib/images/@rental.Book.ImageUrl" alt="Book image" /></td>
+                            <td>@rental.Book.Title</td>
+                            <td>@rental.Book.Author</td>
+                            <td>@rental.Book.Genre</td>
+                            <td>@rental.Book.Publisher</td>
+                            <td>@rental.RentalDate</td>
+                            <td>@rental.DueDate</td>
+                        </tr>
+                    </a>
+
+                }
+            }
+        </tbody>
+    </table>
+</section>
+<section>
+    <h1>Historia wypożyczeń</h1>
+
+    <h2>Liczba wszystkich wypożyczonych książek: @Model.RentalsHistory.Count</h2>
+
+    <table>
+        <thead>
+            <tr>
+                <td>Tytuł</td>
+                <td>Autor</td>
+                <td>Gatunek</td>
+                <td>Wydawca</td>
+                <td>Data wypożyczenia</td>
+                <td>Data zwrotu</td>
+            </tr>
+        </thead>
+        <tbody>
+            @if (Model.RentalsHistory != null)
+            {
+                @foreach (var rental in Model.RentalsHistory)
+                {
+                    <a class="text-dark" asp-area="" asp-controller="Offer" asp-action="Details" asp-route-id="@rental.BookId">
+                        <tr>
+                            <td><img src="~/lib/images/@rental.Book.ImageUrl" alt="Book image" /></td>
+                            <td>@rental.Book.Title</td>
+                            <td>@rental.Book.Author</td>
+                            <td>@rental.Book.Genre</td>
+                            <td>@rental.Book.Publisher</td>
+                            <td>@rental.RentalDate</td>
+                            <td>@rental.ReturnDate</td>
+                        </tr>
+                    </a>
+
+                }
+            }
+        </tbody>
+    </table>
+</section>
+
