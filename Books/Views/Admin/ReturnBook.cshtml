@@ -1,14 +1,48 @@
-﻿
+﻿@model UserModel
 @{
 }
 <h1>Zwróć książkę</h1>
 
-<form method="post">
-    <input type="hidden" name="BookId" value="@Model.BookId">
-    <input type="hidden" name="BorrowerId" value="@Model.BorrowerId">
-    <div class="form-group">
-        <label for="returnDate">Data zwrotu</label>
-        <input type="date" class="form-control" id="returnDate" name="ReturnDate" required>
-    </div>
-    <button type="submit" class="btn btn-primary">Zwróć książkę</button>
-</form>
+
+
+    <input type="hidden" name="rentalId" value="@Model.Rentals">
+    
+<table>
+    <thead>
+       
+        <tr>
+            
+            <td>Tytuł</td>
+            <td>Autor</td>
+            <td>Wydawca</td>
+            <td>Rok</td>
+            <td>Data Wypożyczenia</td>
+            <td>Termin zwrotu</td>
+
+        </tr>
+    </thead>
+    <tbody>
+         @foreach (var rental in Model.Rentals)
+         {
+             <tr>
+                <td> <img src="~/lib/images/@rental.Book.ImageUrl" alt="Book image" /></td>
+                <td>@rental.Book.Title</td>
+                <td>@rental.Book.Author</td>
+                <td>@rental.Book.Publisher</td>
+                <td>@rental.Book.Year</td>
+                <td>@rental.RentalDate</td>
+                <td>@rental.DueDate</td>
+                <td><a asp-area="" asp-action="ReturnBook" asp-controller="Offer" asp-route-rentalId="@rental.Id">Zwróć</a></td>
+                <td><a asp-area="" asp-action="Remind" asp-controller="Offer" asp-route-rentalId="@rental.Id">Przypomnij</a></td>
+
+
+             </tr>
+        
+
+
+
+         }
+    </tbody>
+   
+
+</table>

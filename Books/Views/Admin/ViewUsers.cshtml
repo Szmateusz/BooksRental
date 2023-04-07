@@ -1,4 +1,4 @@
-﻿
+﻿@model List<UserModel>
 @{
 }
 <h1>Lista użytkowników</h1>
@@ -10,7 +10,6 @@
                 <tr>
                     <th>Imię i nazwisko</th>
                     <th>Email</th>
-                    <th>Rola</th>
                     <th>Akcje</th>
                 </tr>
             </thead>
@@ -20,10 +19,11 @@
                     <tr>
                         <td>@user.FirstName @user.LastName</td>
                         <td>@user.Email</td>
-                        <td>@user.Role</td>
                         <td>
                             <a href="@Url.Action("EditUser", "Admin", new { id = user.Id })">Edytuj</a> |
                             <a href="@Url.Action("DeleteUser", "Admin", new { id = user.Id })">Usuń</a>
+                            <a href="@Url.Action("ReturnBook", "Admin", new { userId = user.Id })">Zwróć ksiażki</a>
+
                         </td>
                     </tr>
                 }

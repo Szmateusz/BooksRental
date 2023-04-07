@@ -76,9 +76,12 @@ namespace Books.Controllers
             return View(book);
         }
 
-        [Authorize]
+        [Authorize(AuthenticationSchemes = "Identity.Application")]
+       
         public IActionResult Rent(int id)
         {
+            
+
             var userId = _userManager.GetUserId(User);
             var book = _context.Books.SingleOrDefault(b => b.Id == id);
 
@@ -93,18 +96,18 @@ namespace Books.Controllers
                     RentalDate = DateTime.Now,
                     BookId = book.Id,
                     UserId = userId,
-                    ReturnDate = DateTime.Now.AddDays(14)
+                    DueDate = DateTime.Now.AddDays(14)
                     
                 };
 
                 _rentalRepository.AddRental(rental);
             } else { return NotFound(); }
 
-            return RedirectToAction("Details","Offer",id);
+            return RedirectToAction("Details","Offer", new { id = id });
 
         }
 
-        [Authorize]
+        [Authorize(AuthenticationSchemes = "Identity.Application")]
         public IActionResult Reserve(int id)
         {
             

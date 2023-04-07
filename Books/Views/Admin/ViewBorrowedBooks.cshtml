@@ -1,4 +1,4 @@
-﻿
+﻿@model List<Rental>
 @{
 }
 <h1>Lista wypożyczonych książek</h1>
@@ -15,13 +15,14 @@
                 </tr>
             </thead>
             <tbody>
-                @foreach (var borrow in Model)
+                @foreach (var rental in Model)
                 {
                     <tr>
-                        <td>@borrow.Book.Title</td>
-                        <td>@borrow.Borrower.FirstName @borrow.Borrower.LastName</td>
-                        <td>@borrow.BorrowDate.DateString()</td>
-                        <td>@(borrow.ReturnDate.HasValue ? borrow.ReturnDate.Value.DateString() : "Nie zwrócona")</td>
+                        <td>@rental.Book.Title</td>
+                        <td>@rental.User.FirstName @rental.User.LastName</td>
+                        <td>@rental.RentalDate.ToString()</td>
+                        <td>@(rental.ReturnDate.HasValue ? rental.ReturnDate.Value.ToString() : "Nie zwrócona")</td>
+                        <td><a asp-area="" asp-action="Remind" asp-controller="Offer" asp-route-rentalId="@rental.Id">Przypomnij</a></td>
                     </tr>
                 }
             </tbody>

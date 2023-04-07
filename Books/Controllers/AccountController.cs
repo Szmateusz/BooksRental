@@ -40,6 +40,7 @@ namespace Books.Controllers
         [HttpGet]
         public IActionResult Login()
         {
+            
 
             return View();
         }
@@ -96,7 +97,9 @@ namespace Books.Controllers
                 UserName = userRegisterData.UserName,
                 FirstName = userRegisterData.FirstName,
                 LastName = userRegisterData.LastName,
-                DateOfBirth= userRegisterData.DateOfBirth
+                Email = userRegisterData.Email,
+
+                DateOfBirth = userRegisterData.DateOfBirth
 
 
             };
@@ -105,7 +108,7 @@ namespace Books.Controllers
 
 
 
-            return RedirectToAction("Index", "Account");
+            return RedirectToAction("Login", "Account");
         }
     }
 }

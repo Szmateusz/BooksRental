@@ -5,6 +5,8 @@ namespace Books.Services
     public interface IRentalRepository
     {
         IEnumerable<Rental> GetAllRentalBooks();
+        IEnumerable<Rental> GetAllOverdueRentalBooks();
+
         IEnumerable<Rental> GetAllUserRentalBooks(string id);
 
         IEnumerable<Rental> GetAllUserCurrentRentalBooks(string id);

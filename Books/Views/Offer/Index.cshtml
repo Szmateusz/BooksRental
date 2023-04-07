@@ -28,15 +28,15 @@
         @if(Model.Books != null){
             @foreach (var book in Model.Books)
             {
-                <a class="text-dark" asp-area="" asp-controller="Offer" asp-action="Details" asp-route-id="@book.Id">
+      
                     <tr>
-                        <td><img src="~/lib/images/@book.ImageUrl" alt="Book image" /></td>
-                        <td>@book.Title</td>
+                        <td><a class="text-dark" asp-area="" asp-controller="Offer" asp-action="Details" asp-route-id="@book.Id"><img src="~/lib/images/@book.ImageUrl" alt="Book image" /></a></td>
+                        <td><a class="text-dark" asp-area="" asp-controller="Offer" asp-action="Details" asp-route-id="@book.Id">@book.Title</a></td>
                         <td>@book.Author</td>
                         <td>@book.Publisher</td>
                         <td>@book.Description</td>
                     </tr>
-                </a>
+                
             }
         }
        

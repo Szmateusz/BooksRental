@@ -4,7 +4,6 @@ using Books;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
-using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -12,10 +11,9 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Books.Migrations
 {
     [DbContext(typeof(DbContext))]
-    [Migration("20230403202330_test")]
-    partial class test
+    partial class DbContextModelSnapshot : ModelSnapshot
     {
-        protected override void BuildTargetModel(ModelBuilder modelBuilder)
+        protected override void BuildModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -43,6 +41,9 @@ namespace Books.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<int>("Genre")
+                        .HasColumnType("int");
+
                     b.Property<string>("ImageUrl")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -69,19 +70,13 @@ namespace Books.Migrations
                     b.ToTable("Books");
                 });
 
-            modelBuilder.Entity("Books.Models.CheckedOut", b =>
+            modelBuilder.Entity("Books.Models.Rental", b =>
                 {
                     b.Property<int>("BookId")
                         .HasColumnType("int");
 
-                    b.Property<int>("UserId")
-                        .HasColumnType("int");
-
-                    b.Property<DateTime>("DateCheckedOut")
-                        .HasColumnType("datetime2");
-
-                    b.Property<DateTime?>("DateReturned")
-                        .HasColumnType("datetime2");
+                    b.Property<string>("UserId")
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<DateTime>("DueDate")
                         .HasColumnType("datetime2");
@@ -89,17 +84,20 @@ namespace Books.Migrations
                     b.Property<int>("Id")
                         .HasColumnType("int");
 
-                    b.Property<string>("UserId1")
-                        .HasColumnType("nvarchar(450)");
+                    b.Property<DateTime>("RentalDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime?>("ReturnDate")
+                        .HasColumnType("datetime2");
 
                     b.HasKey("BookId", "UserId");
 
-                    b.HasIndex("UserId1");
+                    b.HasIndex("UserId");
 
-                    b.ToTable("CheckedOuts");
+                    b.ToTable("Rentals");
                 });
 
-            modelBuilder.Entity("Books.Models.Rental", b =>
+            modelBuilder.Entity("Books.Models.Reserve", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -110,16 +108,7 @@ namespace Books.Migrations
                     b.Property<int>("BookId")
                         .HasColumnType("int");
 
-                    b.Property<int>("CustomerId")
-                        .HasColumnType("int");
-
-                    b.Property<DateTime>("DueDate")
-                        .HasColumnType("datetime2");
-
-                    b.Property<DateTime>("RentalDate")
-                        .HasColumnType("datetime2");
-
-                    b.Property<DateTime?>("ReturnDate")
+                    b.Property<DateTime>("ReserveDate")
                         .HasColumnType("datetime2");
 
                     b.Property<string>("UserId")
@@ -132,7 +121,7 @@ namespace Books.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("Rental");
+                    b.ToTable("Reserves");
                 });
 
             modelBuilder.Entity("Books.Models.UserModel", b =>
@@ -345,23 +334,6 @@ namespace Books.Migrations
                     b.ToTable("AspNetUserTokens", (string)null);
                 });
 
-            modelBuilder.Entity("Books.Models.CheckedOut", b =>
-                {
-                    b.HasOne("Books.Models.Book", "Book")
-                        .WithMany()
-                        .HasForeignKey("BookId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("Books.Models.UserModel", "User")
-                        .WithMany()
-                        .HasForeignKey("UserId1");
-
-                    b.Navigation("Book");
-
-                    b.Navigation("User");
-                });
-
             modelBuilder.Entity("Books.Models.Rental", b =>
                 {
                     b.HasOne("Books.Models.Book", "Book")
@@ -372,6 +344,25 @@ namespace Books.Migrations
 
                     b.HasOne("Books.Models.UserModel", "User")
                         .WithMany("Rentals")
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Book");
+
+                    b.Navigation("User");
+                });
+
+            modelBuilder.Entity("Books.Models.Reserve", b =>
+                {
+                    b.HasOne("Books.Models.Book", "Book")
+                        .WithMany()
+                        .HasForeignKey("BookId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Books.Models.UserModel", "User")
+                        .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();

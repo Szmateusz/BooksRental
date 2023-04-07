@@ -7,23 +7,35 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Books.Controllers
 {
-    [Authorize(Roles = "admin")]
+    [Authorize(Roles = "admin", AuthenticationSchemes = "Identity.Application")]
     public class AdminController : Controller
     {
         private readonly IBookRepository _bookRepository;
         private readonly IRentalRepository _rentalRepository;
+        private readonly IReserveRepository _reserveRepository;
         public readonly DbContext _context;
 
-        public AdminController(IBookRepository bookRepository, IRentalRepository rentalRepository, DbContext context)
+        public AdminController(IBookRepository bookRepository, IRentalRepository rentalRepository, DbContext context, IReserveRepository reserveRepository)
         {
             _bookRepository = bookRepository;
             _rentalRepository = rentalRepository;
             _context = context;
+            _reserveRepository = reserveRepository;
         }
 
         public IActionResult Index()
         {
-            return View();
+            var books = _bookRepository.GetAllBooks().ToList();
+            var rentals = _rentalRepository.GetAllRentalBooks().ToList();
+
+            var model = new AdminIndexViewModel
+            {
+                Books = books,
+                Rentals = rentals
+
+            };
+
+            return View(model);
         }
        
 
@@ -65,6 +77,18 @@ namespace Books.Controllers
 
             return View(rentals);
         }
+        public IActionResult OverdueRentals()
+        {
+            var rentals = _rentalRepository.GetAllOverdueRentalBooks().ToList();
+
+            return View(rentals);
+        }
+        public IActionResult ViewUsers()
+        {
+            var users = _context.Users.ToList();
+
+            return View(users);
+        }
 
         [HttpGet]
         public IActionResult BorrowBook(int bookId)
@@ -81,8 +105,7 @@ namespace Books.Controllers
                 {
                     BookId = bookId,
                     Book = book
-
-
+                    
                 }
             };
 
@@ -107,39 +130,71 @@ namespace Books.Controllers
 
             _rentalRepository.AddRental(rental);
 
-            return View();
+            return RedirectToAction("Index","Admin");
         }
 
-        public IActionResult ReturnBook()
+        public IActionResult ReturnBook(string userId)
         {
-            return View();
+            var user = _context.Users.SingleOrDefault(x => x.Id.Equals(userId));
+
+            if (user == null)
+            {
+                return NotFound();
+            }
+
+            user.Rentals = _rentalRepository.GetAllUserRentalBooks(userId).Where(x=>x.ReturnDate==null).ToList();
+            
+            return View(user);
         }
-        public IActionResult ReturnBook(int id)
+
+        public IActionResult ReturnBook(int rentalId)
         {
-            var rental = _context.CheckedOuts.FirstOrDefault(r => r.BookId == id && !r.DateReturned.HasValue);
+            var rental = _rentalRepository.GetRentalById(rentalId);
+
+            string userId=rental.UserId;
 
             if (rental == null)
             {
                 return NotFound();
             }
+            
+             rental.ReturnDate = DateTime.Now;
+            
+            _rentalRepository.UpdateRental(rental);
 
-            rental.DateReturned = DateTime.Now;
-            _context.SaveChanges();
+            return RedirectToAction("ReturnBook", "Admin", userId);
+
+
+        }
+        public IActionResult Remind(int rentalId)
+        {
+            var rental = _rentalRepository.GetRentalById(rentalId);
 
             if (rental.DueDate < DateTime.Today)
             {
-                var customer = rental.User;
+                var user = rental.User;
                 var book = rental.Book;
-
+                
+                
                 var emailSubject = "Przypomnienie o zwrocie książki";
-                var emailMessage = $"Wypożyczenie książki \"{book.Title}\" przez klienta {customer.FirstName} {customer.LastName} minęło termin zwrotu. Prosimy o jak najszybszy zwrot książki.";
+                var emailMessage = $"Wypożyczenie książki \"{book.Title}\" przez klienta {user.FirstName} {user.LastName} minęło {Math.Round((DateTime.Now - rental.DueDate).TotalDays)} dni temu termin zwrotu był na {rental.DueDate.ToString("dd-MM-yyyy")} . Prosimy o jak najszybszy zwrot książki.";
 
-                EmailSender.SendEmail(customer.Email, emailSubject, emailMessage);
+                if(EmailSender.SendEmail(user.Email, emailSubject, emailMessage))
+                {
+                    var result = $"Email do {user.FirstName} {user.LastName} został wysłany";
+
+                    return Json(new { success = true, result });
+                }
+                else
+                {
+                    var result = $"Email nie został wysłany!";
+                    return Json(new { success = false, result });
+                }
+          
             }
 
-            return RedirectToAction(nameof(Index));
+            return NotFound();
         }
-
 
         public IActionResult ViewBorrowedBooks()
         {
@@ -148,20 +203,51 @@ namespace Books.Controllers
 
         public IActionResult ViewReservedBooks()
         {
-            return View();
+           var model = _reserveRepository.GetAllReserveBooks().ToList();
+            return View(model);
+        }
+        public IActionResult DeleteReserv(int id)
+        {
+
+            _reserveRepository.DeleteReserve(id);
+
+            return RedirectToAction("ViewReservedBooks","Admin");
         }
 
         public IActionResult ViewOverdueBooks()
         {
             return View();
         }
-        public IActionResult ViewUsers()
+
+        [HttpGet]
+        public IActionResult EditUser(string userId)
         {
-            return View();
+            var model = _context.Users.SingleOrDefault(x => x.Id.Equals(userId));
+            return View(model);
+
         }
-        public IActionResult ViewEditUser()
+        [HttpPost]
+        public IActionResult EditUser(UserModel model)
         {
-            return View();
+            if (ModelState.IsValid)
+            {
+                var user = _context.Users.SingleOrDefault(x => x.Id.Equals(model.Id));
+
+                if (user != null)
+                {
+                    user.FirstName = model.FirstName;
+                    user.LastName = model.LastName;
+                    user.PhoneNumber = model.PhoneNumber;
+                    user.DateOfBirth = model.DateOfBirth;
+
+                    _context.Users.Update(user);
+                    _context.SaveChanges();
+                    return RedirectToAction("ViewUsers", "Admin");
+                }
+                
+
+            }
+            return View(model);
 
         }
     }

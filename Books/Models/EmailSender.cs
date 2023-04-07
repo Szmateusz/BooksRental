@@ -5,31 +5,43 @@ namespace Books.Models
 {
     public class EmailSender
     {
-        public static void SendEmail(string email, string subject, string message)
+        public static bool SendEmail(string email, string subject, string message)
         {
-            var fromAddress = new MailAddress("your-email@gmail.com", "Book Rental");
-            var toAddress = new MailAddress(email);
-            const string fromPassword = "your-email-password";
-            const string smtpHost = "smtp.gmail.com";
-            const int smtpPort = 587;
-
-            var smtp = new SmtpClient
+            try
             {
-                Host = smtpHost,
-                Port = smtpPort,
-                EnableSsl = true,
-                DeliveryMethod = SmtpDeliveryMethod.Network,
-                UseDefaultCredentials = false,
-                Credentials = new NetworkCredential(fromAddress.Address, fromPassword)
-            };
+                var fromAddress = new MailAddress("warmachine3001wm@gmail.com", "Book Rental");
+                var toAddress = new MailAddress(email);
+                const string fromPassword = "aslfraaxhvbggcrs";
+                const string smtpHost = "smtp.gmail.com";
+                const int smtpPort = 587;
 
-            var mailMessage = new MailMessage(fromAddress, toAddress)
+                var smtp = new SmtpClient
+                {
+                    Host = smtpHost,
+                    Port = smtpPort,
+                    EnableSsl = true,
+                    DeliveryMethod = SmtpDeliveryMethod.Network,
+                    UseDefaultCredentials = false,
+                    Credentials = new NetworkCredential(fromAddress.Address, fromPassword)
+                };
+
+                var mailMessage = new MailMessage(fromAddress, toAddress)
+                {
+                    Subject = subject,
+                    Body = message
+                };
+
+                smtp.Send(mailMessage);
+
+                return true;
+
+            }
+            catch(Exception ex) 
             {
-                Subject = subject,
-                Body = message
-            };
-
-            smtp.Send(mailMessage);
+                Console.WriteLine(ex);
+                return false;
+            }
+          
         }
     }
 }

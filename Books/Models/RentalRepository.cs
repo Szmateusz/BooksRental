@@ -1,5 +1,6 @@
 ﻿using Books.Services;
 using Google;
+using Microsoft.EntityFrameworkCore;
 
 namespace Books.Models
 {
@@ -14,15 +15,22 @@ namespace Books.Models
 
         public IEnumerable<Rental> GetAllRentalBooks()
         {
-            return _context.Rentals.ToList();
+            return _context.Rentals.Include(u => u.User).ToList();
         }
+        public IEnumerable<Rental> GetAllOverdueRentalBooks()
+        {
+
+            return _context.Rentals.Where(x => x.ReturnDate > DateTime.Now).ToList();
+
+        }
+
         public IEnumerable<Rental> GetAllUserRentalBooks(string id)
         {
             return _context.Rentals.Where(u => u.UserId.Equals(id)).ToList();
         }
         public IEnumerable<Rental> GetAllUserCurrentRentalBooks(string id)
         {
-            return _context.Rentals.Where(u => u.UserId.Equals(id)).Where(x=>x.ReturnDate>DateTime.Now).ToList();
+            return _context.Rentals.Where(u => u.UserId.Equals(id)).Where(x=>x.ReturnDate>DateTime.Now).Include(b=>b.Book).ToList();
 
         }
         public IEnumerable<Rental> GetAllUserOverdueRentalBooks(string id)
@@ -33,7 +41,7 @@ namespace Books.Models
 
         public Rental GetRentalById(int id)
         {
-            return _context.Rentals.FirstOrDefault(c => c.Id == id);
+            return _context.Rentals.Include(u => u.User).Include(b=>b.Book).FirstOrDefault(c => c.Id == id);
         }
 
         public void AddRental(Rental rental)

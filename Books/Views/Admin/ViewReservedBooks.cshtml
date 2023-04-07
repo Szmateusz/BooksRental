@@ -1,4 +1,4 @@
-﻿
+﻿@model List<Reserve>
 @{
 }
 
@@ -13,6 +13,8 @@
                     <th>Rezerwujący</th>
                     <th>Data rezerwacji</th>
                     <th>Data odbioru</th>
+                    <th>Akcje</th>
+
                 </tr>
             </thead>
             <tbody>
@@ -20,9 +22,10 @@
                 {
                     <tr>
                         <td>@reservation.Book.Title</td>
-                        <td>@reservation.Reserver.FirstName @reservation.Reserver.LastName</td>
-                        <td>@reservation.ReservationDate.DateString()</td>
-                        <td>@(reservation.PickupDate.HasValue ? reservation.PickupDate.Value.DateString() : "Nie odebrano")</td>
+                        <td>@reservation.User.FirstName @reservation.User.LastName</td>
+                        <td>@reservation.ReserveDate.ToString()</td>
+                        <td><a asp-action="DeleteReserv" asp-route-id="@reservation.Id" onclick="return confirm('Czy na pewno chcesz usunąć rezerwację?')">Usuń</a></td>
+                       @* <td>@(reservation.dat.HasValue ? reservation.PickupDate.Value.DateString() : "Nie odebrano")</td>*@
                     </tr>
                 }
             </tbody>

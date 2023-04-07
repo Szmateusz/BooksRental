@@ -14,9 +14,9 @@
 
 @using (Html.BeginForm("BorrowBook", "Admin", FormMethod.Post))
 {
+
    @Html.HiddenFor(x=>x.Rental)
-   @Html.DropDownListFor(x => x.Users, Html.GetEnumSelectList<UserModel>(), "Wybierz użytkownika")
-   
+
    <input type="date" name="date" id="date"/>
 
 

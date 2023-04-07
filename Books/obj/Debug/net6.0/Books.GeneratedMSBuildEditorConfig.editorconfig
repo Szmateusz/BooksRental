@@ -40,6 +40,10 @@ build_metadata.AdditionalFiles.CssScope =
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQWRtaW5cRWRpdEJvb2suY3NodG1s
 build_metadata.AdditionalFiles.CssScope = 
 
+[E:/ASP.NET-App/Books/Books/Views/Admin/EditUser.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQWRtaW5cRWRpdFVzZXIuY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
 [E:/ASP.NET-App/Books/Books/Views/Admin/Index.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQWRtaW5cSW5kZXguY3NodG1s
 build_metadata.AdditionalFiles.CssScope = 
@@ -50,10 +54,6 @@ build_metadata.AdditionalFiles.CssScope =
 
 [E:/ASP.NET-App/Books/Books/Views/Admin/ViewBorrowedBooks.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQWRtaW5cVmlld0JvcnJvd2VkQm9va3MuY3NodG1s
-build_metadata.AdditionalFiles.CssScope = 
-
-[E:/ASP.NET-App/Books/Books/Views/Admin/ViewEditUser.cshtml]
-build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQWRtaW5cVmlld0VkaXRVc2VyLmNzaHRtbA==
 build_metadata.AdditionalFiles.CssScope = 
 
 [E:/ASP.NET-App/Books/Books/Views/Admin/ViewOverdueBooks.cshtml]

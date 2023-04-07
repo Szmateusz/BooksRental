@@ -32,7 +32,7 @@
 
         <div class="form-group">
             @Html.LabelFor(x => x.Genre)
-            @Html.DropDownListFor(x => x.Genres, Html.GetEnumSelectList<Genres>(),, new { @class = "form-control" } "Gatunek")
+            @Html.DropDownListFor(x => x.Genre, Html.GetEnumSelectList<Genres>(),"Gatunek", new { @class = "form-control" })
             @Html.TextBoxFor(x => x.ImageUrl, new { @class = "form-control" })
         </div>
 

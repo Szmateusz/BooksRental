@@ -1,4 +1,4 @@
-﻿
+﻿@model List<Rental>
 @{
 }
 <h1>Lista książek z opóźnieniem w zwrocie</h1>
@@ -16,14 +16,15 @@
                 </tr>
             </thead>
             <tbody>
-                @foreach (var borrow in Model)
+                @foreach (var overdue in Model)
                 {
                     <tr>
-                        <td>@borrow.Book.Title</td>
-                        <td>@borrow.Borrower.FirstName @borrow.Borrower.LastName</td>
-                        <td>@borrow.BorrowDate.DateString()</td>
-                        <td>@borrow.ReturnDate.Value.DateString()</td>
-                        <td>@borrow.DaysOverdue</td>
+                        <td>@overdue.Book.Title</td>
+                        <td>@overdue.User.FirstName @overdue.User.LastName</td>
+                        <td>@overdue.RentalDate.ToString()</td>
+                        <td>@overdue.ReturnDate.Value.ToString()</td>
+                        <td>@DateTime.Now-@overdue.DueDate.ToString()</td>
+                        <td><a asp-area="" asp-action="Remind" asp-controller="Offer" asp-route-rentalId="@overdue.Id">Przypomnij</a></td>
                     </tr>
                 }
             </tbody>

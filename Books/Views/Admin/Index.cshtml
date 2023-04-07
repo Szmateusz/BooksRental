@@ -1,13 +1,16 @@
-﻿
+﻿@model AdminIndexViewModel
 @{
 }
-
+<div id="message" style="display:none;">Komunikat po udanej operacji</div>
 <h1>Panel administratora</h1>
 
 <div class="list-group">
     <a href="@Url.Action("Index")" class="list-group-item list-group-item-action">Książki</a>
-    <a href="@Url.Action("CreateBook")" class="list-group-item list-group-item-action">Dodaj książkę</a>
+    <a href="@Url.Action("AddBook")" class="list-group-item list-group-item-action">Dodaj książkę</a>
     <a href="@Url.Action("Rentals")" class="list-group-item list-group-item-action">Wypożyczenia</a>
+    <a href="@Url.Action("OverdueRentals")" class="list-group-item list-group-item-action">Zaległe</a>
+    <a href="@Url.Action("ViewUsers")" class="list-group-item list-group-item-action">Użytkownicy</a>
+
 </div>
 
 <div class="card">
@@ -33,6 +36,8 @@
                         <td>
                             <a asp-action="EditBook" asp-route-id="@book.Id">Edytuj</a>
                             <a asp-action="DeleteBook" asp-route-id="@book.Id" onclick="return confirm('Czy na pewno chcesz usunąć tę książkę?')">Usuń</a>
+                            <a asp-action="BorrowBook" asp-route-bookId="@book.Id" >Wypożycz</a>
+
                         </td>
                     </tr>
                 }
@@ -54,13 +59,16 @@
                 </tr>
             </thead>
             <tbody>
-                @foreach (var checkOut in Model.CheckOuts)
+                @foreach (var rental in Model.Rentals)
                 {
                     <tr>
-                        <td>@checkOut.Book.Title</td>
-                        <td>@checkOut.User.UserName</td>
-                        <td>@checkOut.CheckOutDate</td>
-                        <td>@(checkOut.ReturnDate.HasValue ? checkOut.ReturnDate.Value.ToShortDateString() : "Nie zwrócona")</td>
+                        <td>@rental.Book.Title</td>
+                        <td>@rental.User.UserName</td>
+                        <td>@rental.RentalDate</td>
+                        <td>@(rental.ReturnDate.HasValue ? rental.ReturnDate.Value.ToShortDateString() : "Nie zwrócona")</td>      
+                        <td><input type="button" onclick="remind(@rental.Id)" value="Przypomnij" /></td>
+
+                        
                     </tr>
                 }
             </tbody>
@@ -68,3 +76,10 @@
     </div>
 
 </div>
+@section scripts{
+
+
+
+    <script src="~/js/admin.js"></script>
+
+	}
