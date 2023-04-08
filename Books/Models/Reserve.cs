@@ -1,7 +1,10 @@
-﻿namespace Books.Models
+﻿using System.ComponentModel.DataAnnotations;
+
+namespace Books.Models
 {
     public class Reserve
     {
+        [Key]
         public int Id { get; set; }
         public DateTime ReserveDate { get; set; }
         public int BookId { get; set; }

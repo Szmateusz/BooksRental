@@ -1,85 +1,25 @@
 ﻿@model AdminIndexViewModel
+
 @{
+    Layout = "_LayoutAdmin";
 }
-<div id="message" style="display:none;">Komunikat po udanej operacji</div>
 <h1>Panel administratora</h1>
 
 <div class="list-group">
-    <a href="@Url.Action("Index")" class="list-group-item list-group-item-action">Książki</a>
-    <a href="@Url.Action("AddBook")" class="list-group-item list-group-item-action">Dodaj książkę</a>
-    <a href="@Url.Action("Rentals")" class="list-group-item list-group-item-action">Wypożyczenia</a>
-    <a href="@Url.Action("OverdueRentals")" class="list-group-item list-group-item-action">Zaległe</a>
-    <a href="@Url.Action("ViewUsers")" class="list-group-item list-group-item-action">Użytkownicy</a>
+    <a href="@Url.Action("ViewBooks","Admin")" class="list-group-item list-group-item-action">Książki</a>
+    <a href="@Url.Action("AddBook","Admin")" class="list-group-item list-group-item-action">Dodaj książkę</a>
+    <a href="@Url.Action("ViewRentalBooks","Admin")" class="list-group-item list-group-item-action">Historia wypożyczeń</a>
+    <a href="@Url.Action("ViewOverdueBooks","Admin")" class="list-group-item list-group-item-action">Zaległe</a>
+    <a href="@Url.Action("ViewUsers","Admin")" class="list-group-item list-group-item-action">Użytkownicy</a>
+    <a href="@Url.Action("CreateUser","Admin")" class="list-group-item list-group-item-action">Utwórz użytkownika</a>
+    <a href="@Url.Action("ViewBooks","Admin")" class="list-group-item list-group-item-action">Lista książek</a>
+    <a href="@Url.Action("ViewCurrentRentals","Admin")" class="list-group-item list-group-item-action">Obecne wypożyczenia</a>
+
+
 
 </div>
 
-<div class="card">
-    <div class="card-header">Książki</div>
-    <div class="card-body">
-       
-        <table class="table">
-            <thead>
-                <tr>
-                    <th>Tytuł</th>
-                    <th>Autor</th>
-                    <th>Dostępne egzemplarze</th>
-                    <th>Akcje</th>
-                </tr>
-            </thead>
-            <tbody>
-                @foreach (var book in Model.Books)
-                {
-                    <tr>
-                        <td>@book.Title</td>
-                        <td>@book.Author</td>
-                        <td>@(book.AvailableCopies > 0 ? book.AvailableCopies.ToString() : "Brak")</td>
-                        <td>
-                            <a asp-action="EditBook" asp-route-id="@book.Id">Edytuj</a>
-                            <a asp-action="DeleteBook" asp-route-id="@book.Id" onclick="return confirm('Czy na pewno chcesz usunąć tę książkę?')">Usuń</a>
-                            <a asp-action="BorrowBook" asp-route-bookId="@book.Id" >Wypożycz</a>
-
-                        </td>
-                    </tr>
-                }
-            </tbody>
-        </table>
-    </div>
-</div>
-
-<div class="card mt-3">
-    <div class="card-header">Wypożyczenia</div>
-    <div class="card-body">
-        <table class="table">
-            <thead>
-                <tr>
-                    <th>Książka</th>
-                    <th>Użytkownik</th>
-                    <th>Data wypożyczenia</th>
-                    <th>Data zwrotu</th>
-                </tr>
-            </thead>
-            <tbody>
-                @foreach (var rental in Model.Rentals)
-                {
-                    <tr>
-                        <td>@rental.Book.Title</td>
-                        <td>@rental.User.UserName</td>
-                        <td>@rental.RentalDate</td>
-                        <td>@(rental.ReturnDate.HasValue ? rental.ReturnDate.Value.ToShortDateString() : "Nie zwrócona")</td>      
-                        <td><input type="button" onclick="remind(@rental.Id)" value="Przypomnij" /></td>
-
-                        
-                    </tr>
-                }
-            </tbody>
-        </table>
-    </div>
-
-</div>
 @section scripts{
 
-
-
-    <script src="~/js/admin.js"></script>
 
 	}

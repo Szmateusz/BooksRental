@@ -15,18 +15,24 @@ namespace Books.Models
 
         public IEnumerable<Rental> GetAllRentalBooks()
         {
-            return _context.Rentals.Include(u => u.User).ToList();
+            return _context.Rentals.Include(u => u.User).Include(b=>b.Book).ToList();
         }
+        public IEnumerable<Rental> GetAllCurrentRentalBooks()
+        {
+            return _context.Rentals.Where(x=>x.ReturnDate==null).Include(u => u.User).Include(b => b.Book).ToList();
+
+        }
+
         public IEnumerable<Rental> GetAllOverdueRentalBooks()
         {
 
-            return _context.Rentals.Where(x => x.ReturnDate > DateTime.Now).ToList();
+            return _context.Rentals.Where(x => x.DueDate < DateTime.Now && x.ReturnDate == null).Include(b => b.Book).Include(u=>u.User).ToList();
 
         }
 
         public IEnumerable<Rental> GetAllUserRentalBooks(string id)
         {
-            return _context.Rentals.Where(u => u.UserId.Equals(id)).ToList();
+            return _context.Rentals.Where(u => u.UserId.Equals(id)).Include(b=>b.Book).ToList();
         }
         public IEnumerable<Rental> GetAllUserCurrentRentalBooks(string id)
         {
@@ -35,7 +41,7 @@ namespace Books.Models
         }
         public IEnumerable<Rental> GetAllUserOverdueRentalBooks(string id)
         {
-            return _context.Rentals.Where(u => u.UserId.Equals(id)).Where(x=>x.DueDate<DateTime.Now).ToList();
+            return _context.Rentals.Where(u => u.UserId.Equals(id)).Where(x=>x.DueDate<DateTime.Now).Include(b => b.Book).ToList();
 
         }
 
@@ -46,13 +52,15 @@ namespace Books.Models
 
         public void AddRental(Rental rental)
         {
-            _context.Rentals.Add(rental);
+    
+            _context.Rentals.Add(rental).Property(x => x.Id).IsModified = false;
             _context.SaveChanges();
         }
 
         public void UpdateRental(Rental rental)
         {
-            _context.Rentals.Update(rental);
+
+            _context.Update(rental).Property(x => x.Id).IsModified = false;
             _context.SaveChanges();
         }
 

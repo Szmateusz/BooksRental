@@ -6,6 +6,8 @@ namespace Books.Services
     {
         IEnumerable<Rental> GetAllRentalBooks();
         IEnumerable<Rental> GetAllOverdueRentalBooks();
+        IEnumerable<Rental> GetAllCurrentRentalBooks();
+
 
         IEnumerable<Rental> GetAllUserRentalBooks(string id);
 

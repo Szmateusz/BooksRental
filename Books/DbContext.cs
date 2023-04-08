@@ -29,6 +29,9 @@ namespace Books
             modelBuilder.Entity<UserModel>().Property(u => u.Email).IsRequired();
 
             modelBuilder.Entity<Rental>()
+            .HasKey(u => u.Id);
+
+            modelBuilder.Entity<Rental>()
             .HasOne(r => r.User)
             .WithMany(u => u.Rentals)
             .HasForeignKey(r => r.UserId);

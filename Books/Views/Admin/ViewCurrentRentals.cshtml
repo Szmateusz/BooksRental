@@ -1,0 +1,36 @@
+﻿@model List<Rental>
+
+@{
+    Layout = "_LayoutAdmin";
+}
+
+<div class="card mt-3">
+    <div class="card-header">Wypożyczenia</div>
+    <div class="card-body">
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>Książka</th>
+                    <th>Użytkownik</th>
+                    <th>Data wypożyczenia</th>
+                    <th>Data zwrotu</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var rental in Model)
+                {
+                    <tr>
+                        <td>@rental.Book.Title</td>
+                        <td>@rental.User.FullName</td>
+                        <td>@rental.RentalDate</td>
+                        <td>@rental.DueDate.ToShortDateString()</td>
+                        <td><input type="button" onclick="remind(@rental.Id)" value="Przypomnij" /></td>
+
+
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+
+</div>

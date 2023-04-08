@@ -28,28 +28,24 @@ table tr{
     position: fixed;
     top: 10px;
     right: 10px;
-    
     z-index: 9999;
-
-    padding:20px;
-    border:1px solid black;
-    border-radius:10px;
-    text-align:center;
-    vertical-align:middle;
-
+    padding: 20px;
+    border: 1px solid black;
+    border-radius: 10px;
+    text-align: center;
+    vertical-align: middle;
     color: black;
-    font-size:16px;
-    font-weight:bold;
-
-  
+    font-size: 16px;
+    font-weight: bold;
+   
     width: 200px;
     height: auto;
 }
 
-#message .success {
-        background: linear-gradient(45deg,#b6ff00,#4cff00);
+.success {
+     background: linear-gradient(45deg,#b6ff00,#4cff00);
 }
+.failed {
+  background: linear-gradient(45deg,#fc3333,#a40707);
 
-#message .failed {
-    background: linear-gradient(45deg,#fc3333,#a40707);
 }

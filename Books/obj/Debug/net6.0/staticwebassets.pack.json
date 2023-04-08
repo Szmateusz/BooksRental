@@ -13,6 +13,18 @@
       "PackagePath": "staticwebassets\\favicon.ico"
     },
     {
+      "Id": "E:\\ASP.NET-App\\Books\\Books\\wwwroot\\images\\123.png",
+      "PackagePath": "staticwebassets\\images\\123.png"
+    },
+    {
+      "Id": "E:\\ASP.NET-App\\Books\\Books\\wwwroot\\images\\13.jpg",
+      "PackagePath": "staticwebassets\\images\\13.jpg"
+    },
+    {
+      "Id": "E:\\ASP.NET-App\\Books\\Books\\wwwroot\\images\\default.png",
+      "PackagePath": "staticwebassets\\images\\default.png"
+    },
+    {
       "Id": "E:\\ASP.NET-App\\Books\\Books\\wwwroot\\js\\admin.js",
       "PackagePath": "staticwebassets\\js\\admin.js"
     },

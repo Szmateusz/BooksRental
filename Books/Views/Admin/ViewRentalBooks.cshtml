@@ -1,5 +1,6 @@
 ﻿@model List<Rental>
 @{
+    Layout = "_LayoutAdmin";
 }
 <h1>Lista wypożyczonych książek</h1>
 
@@ -22,7 +23,7 @@
                         <td>@rental.User.FirstName @rental.User.LastName</td>
                         <td>@rental.RentalDate.ToString()</td>
                         <td>@(rental.ReturnDate.HasValue ? rental.ReturnDate.Value.ToString() : "Nie zwrócona")</td>
-                        <td><a asp-area="" asp-action="Remind" asp-controller="Offer" asp-route-rentalId="@rental.Id">Przypomnij</a></td>
+                        <td><input type="button" onclick="remind(@rental.Id)" value="Przypomnij" /></td>
                     </tr>
                 }
             </tbody>

@@ -1,6 +1,7 @@
 ﻿using Books.Models;
 using Books.Services;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
@@ -10,23 +11,27 @@ namespace Books.Controllers
     [Authorize(Roles = "admin", AuthenticationSchemes = "Identity.Application")]
     public class AdminController : Controller
     {
+        public readonly Microsoft.AspNetCore.Hosting.IHostingEnvironment _hostingEnvironment;
+        private readonly UserManager<UserModel> _usermanager;
         private readonly IBookRepository _bookRepository;
         private readonly IRentalRepository _rentalRepository;
         private readonly IReserveRepository _reserveRepository;
         public readonly DbContext _context;
 
-        public AdminController(IBookRepository bookRepository, IRentalRepository rentalRepository, DbContext context, IReserveRepository reserveRepository)
+        public AdminController(IBookRepository bookRepository, IRentalRepository rentalRepository, DbContext context, IReserveRepository reserveRepository, Microsoft.AspNetCore.Hosting.IHostingEnvironment hostingEnvironment,UserManager<UserModel> usermanager)
         {
             _bookRepository = bookRepository;
             _rentalRepository = rentalRepository;
             _context = context;
             _reserveRepository = reserveRepository;
+            _hostingEnvironment = hostingEnvironment;   
+            _usermanager = usermanager;
         }
 
         public IActionResult Index()
         {
             var books = _bookRepository.GetAllBooks().ToList();
-            var rentals = _rentalRepository.GetAllRentalBooks().ToList();
+            var rentals = _rentalRepository.GetAllCurrentRentalBooks().ToList();
 
             var model = new AdminIndexViewModel
             {
@@ -37,7 +42,22 @@ namespace Books.Controllers
 
             return View(model);
         }
-       
+        public IActionResult ViewCurrentRentals()
+        {
+           
+            var rentals = _rentalRepository.GetAllCurrentRentalBooks().ToList();
+
+           
+            return View(rentals);
+        }
+        public IActionResult ViewBooks()
+        {
+            var books = _bookRepository.GetAllBooks().ToList();
+           
+
+            return View(books);
+        }
+
 
 
         public IActionResult AddBook()
@@ -46,8 +66,23 @@ namespace Books.Controllers
         }
 
         [HttpPost]
-        public IActionResult AddBook(Book book)
+        public async Task<IActionResult> AddBook(Book book, IFormFile Image)
         {
+            if (Image != null && Image.Length > 0)
+            {
+                var fileName = Path.GetFileName(book.Title + ".jpg");
+                var filePath = Path.Combine(_hostingEnvironment.WebRootPath, "images", fileName);
+
+                using (var stream = new FileStream(filePath, FileMode.Create))
+                {
+                    await Image.CopyToAsync(stream);
+                }
+                // Zapisz nazwę pliku w modelu
+                book.Image = fileName;
+            }
+            else { book.Image = "default.png"; }
+
+
             _bookRepository.AddBook(book);
             return RedirectToAction("Index");
         }
@@ -59,8 +94,24 @@ namespace Books.Controllers
         }
 
         [HttpPost]
-        public IActionResult EditBook(Book book)
+        public async Task<IActionResult> EditBook(Book book,IFormFile Image)
         {
+            if (Image != null && Image.Length > 0)
+            {
+                var fileName = Path.GetFileName(book.Title + ".jpg");
+                var filePath = Path.Combine(_hostingEnvironment.WebRootPath, "images", fileName);
+
+                using (var stream = new FileStream(filePath, FileMode.Create))
+                {
+                    await Image.CopyToAsync(stream);
+                }
+                // Zapisz nazwę pliku w modelu
+                book.Image = fileName;
+            }
+            else { book.Image = "default.png"; }
+
+
+
             _bookRepository.UpdateBook(book);
             return RedirectToAction("Index");
         }
@@ -71,12 +122,7 @@ namespace Books.Controllers
             return RedirectToAction("Index");
         }
 
-        public IActionResult Rentals()
-        {
-            var rentals = _rentalRepository.GetAllRentalBooks().ToList();
-
-            return View(rentals);
-        }
+        
         public IActionResult OverdueRentals()
         {
             var rentals = _rentalRepository.GetAllOverdueRentalBooks().ToList();
@@ -103,6 +149,7 @@ namespace Books.Controllers
 
                 Rental = new Rental
                 {
+                    
                     BookId = bookId,
                     Book = book
                     
@@ -114,18 +161,21 @@ namespace Books.Controllers
         [HttpPost]
         public IActionResult BorrowBook(BorrowBookModel model,DateTime date)
         {
+
+            var book = _bookRepository.GetBookById(model.Rental.BookId);
+
             var rental = new Rental
             {
                 RentalDate = DateTime.Now,
-                BookId = model.Rental.BookId,
-                UserId = model.Users.First().Id,
+                BookId = book.Id,
+                UserId = model.UserId,
                 DueDate = date
                 
             };
 
-            var book = model.Rental.Book;
+            
             book.AvailableCopies += -1;
-
+            
             _bookRepository.UpdateBook(book);
 
             _rentalRepository.AddRental(rental);
@@ -133,8 +183,9 @@ namespace Books.Controllers
             return RedirectToAction("Index","Admin");
         }
 
+        [HttpGet]
         public IActionResult ReturnBook(string userId)
-        {
+            {
             var user = _context.Users.SingleOrDefault(x => x.Id.Equals(userId));
 
             if (user == null)
@@ -142,27 +193,39 @@ namespace Books.Controllers
                 return NotFound();
             }
 
+            
+
             user.Rentals = _rentalRepository.GetAllUserRentalBooks(userId).Where(x=>x.ReturnDate==null).ToList();
             
             return View(user);
         }
 
+        [HttpPost]
         public IActionResult ReturnBook(int rentalId)
         {
             var rental = _rentalRepository.GetRentalById(rentalId);
-
-            string userId=rental.UserId;
 
             if (rental == null)
             {
                 return NotFound();
             }
-            
+
+                
              rental.ReturnDate = DateTime.Now;
             
             _rentalRepository.UpdateRental(rental);
 
-            return RedirectToAction("ReturnBook", "Admin", userId);
+            //Add avaible copie
+
+            var book = rental.Book;
+            book.AvailableCopies += +1;
+
+            _bookRepository.UpdateBook(book);
+
+
+            var result = $"Książka została zwrócona";
+
+            return Json(new { success = true, result });
 
 
         }
@@ -190,15 +253,24 @@ namespace Books.Controllers
                     var result = $"Email nie został wysłany!";
                     return Json(new { success = false, result });
                 }
-          
+
+            }
+            else
+            {
+                var result = $"Termin zwrotu nie upłynął!";
+                return Json(new { success = false, result });
             }
 
             return NotFound();
+           
         }
 
-        public IActionResult ViewBorrowedBooks()
+        public IActionResult ViewRentalBooks()
         {
-            return View();
+            var rentals = _rentalRepository.GetAllRentalBooks().Where(x=>x.ReturnDate != null).ToList();
+
+            return View(rentals);
+
         }
 
         public IActionResult ViewReservedBooks()
@@ -216,7 +288,8 @@ namespace Books.Controllers
 
         public IActionResult ViewOverdueBooks()
         {
-            return View();
+            var model = _rentalRepository.GetAllOverdueRentalBooks();
+            return View(model);
         }
 
         [HttpGet]
@@ -249,6 +322,64 @@ namespace Books.Controllers
             }
             return View(model);
 
+        }
+
+        [HttpGet]
+        public IActionResult CreateUser()
+        {
+            ViewData["isRegistered"] = false;
+            ViewData["isPasswordLenght"] = true;
+
+            return View();
+        }
+        [HttpPost]
+        public async Task <IActionResult> CreateUser(RegisterModel userRegisterData)
+        {
+            ViewData["isPasswordLenght"] = true;
+            ViewData["isRegistered"] = false;
+
+
+            if (!ModelState.IsValid)
+            {
+                return View(userRegisterData);
+            }
+            if (_context.Users.Any(x => x.UserName.Equals(userRegisterData.UserName)))
+            {
+                ViewData["isRegistered"] = true;
+
+                return View(userRegisterData);
+            }
+            if (userRegisterData.Password.Length < 5)
+            {
+                ViewData["isPasswordLenght"] = false;
+                return View(userRegisterData);
+
+            }
+
+            var newUser = new UserModel
+            {
+                UserName = userRegisterData.UserName,
+                FirstName = userRegisterData.FirstName,
+                LastName = userRegisterData.LastName,
+                Email = userRegisterData.Email,
+
+                DateOfBirth = userRegisterData.DateOfBirth
+            };
+
+            await _usermanager.CreateAsync(newUser, userRegisterData.Password);
+
+            return RedirectToAction("Index", "Admin");
+        }
+
+        public IActionResult DeleteUser(string id)
+        {
+            var user =  _context.Users.SingleOrDefault(u=>u.Id.Equals(id));
+            if(user != null)
+            {
+                _context.Users.Remove(user);
+                _context.SaveChanges();
+            }  
+            return RedirectToAction("ViewUsers");
         }
     }
 }

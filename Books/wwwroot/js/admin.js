@@ -7,9 +7,25 @@ function remind(id) {
         success: function (data) {
             if (data.success) {
 
-                showSuccessMessage(data.result, "success");
+                showSuccessMessage(data.result, 'success');
             } else {
-                showSuccessMessage(data.result, "failed");
+                showSuccessMessage(data.result, 'failed');
+
+            }
+        }
+    });
+}
+function returnBook(id) {
+    $.ajax({
+        url: '/Admin/ReturnBook',
+        type: 'POST',
+        data: { rentalId: id },
+        success: function (data) {
+            if (data.success) {
+
+                showSuccessMessage(data.result, 'success');
+            } else {
+                showSuccessMessage(data.result, 'failed');
 
             }
         }
@@ -28,7 +44,8 @@ function showSuccessMessage(text,type) {
     // Ukryj diva po czasie
     setTimeout(function () {
         $('#message').fadeOut();
-    $('#message').removeClass(type);
+        $.delay(1000);
+        $('#message').removeClass(type);
 
     }, 3000);
 }

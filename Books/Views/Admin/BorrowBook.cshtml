@@ -1,11 +1,12 @@
 ﻿@model BorrowBookModel
 @{
+    Layout = "_LayoutAdmin";
 }
 
 
 <h1>Wypożycz książkę</h1>
 
-<p><img src="~/lib/images/@Model.Rental.Book.ImageUrl" alt="Book image"/> </p>
+<p><img src="~/images/@Model.Rental.Book.Image" alt="Book image"/> </p>
 <p> @Model.Rental.Book.Title</p>
 <p> @Model.Rental.Book.Author</p>
 <p> @Model.Rental.Book.Publisher  --  @Model.Rental.Book.Year</p>
@@ -15,8 +16,12 @@
 @using (Html.BeginForm("BorrowBook", "Admin", FormMethod.Post))
 {
 
-   @Html.HiddenFor(x=>x.Rental)
+   @Html.HiddenFor(x=>x.Rental.BookId)
 
+    @Html.DropDownListFor(u => u.UserId, new SelectList(Model.Users, "Id", "FullName"), "Wybierz użytkownika")
+
+   
+   <br />
    <input type="date" name="date" id="date"/>
 
 

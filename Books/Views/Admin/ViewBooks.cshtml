@@ -1,0 +1,38 @@
+﻿@model List<Book>
+
+@{
+    Layout = "_LayoutAdmin";
+}
+
+<div class="card">
+    <div class="card-header">Książki</div>
+    <div class="card-body">
+
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>Tytuł</th>
+                    <th>Autor</th>
+                    <th>Dostępne egzemplarze</th>
+                    <th>Akcje</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var book in Model)
+                {
+                    <tr>
+                        <td>@book.Title</td>
+                        <td>@book.Author</td>
+                        <td>@(book.AvailableCopies > 0 ? book.AvailableCopies.ToString() : "Brak")</td>
+                        <td>
+                            <a asp-action="EditBook" asp-route-id="@book.Id">Edytuj</a>
+                            <a asp-action="DeleteBook" asp-route-id="@book.Id" onclick="return confirm('Czy na pewno chcesz usunąć tę książkę?')">Usuń</a>
+                            <a asp-action="BorrowBook" asp-route-bookId="@book.Id">Wypożycz</a>
+
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>

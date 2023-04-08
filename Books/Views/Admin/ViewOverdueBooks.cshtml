@@ -1,5 +1,6 @@
 ﻿@model List<Rental>
 @{
+    Layout = "_LayoutAdmin";
 }
 <h1>Lista książek z opóźnieniem w zwrocie</h1>
 
@@ -11,20 +12,23 @@
                     <th>Tytuł</th>
                     <th>Wypożyczający</th>
                     <th>Data wypożyczenia</th>
-                    <th>Data zwrotu</th>
+                    
                     <th>Opóźnienie (dni)</th>
                 </tr>
             </thead>
             <tbody>
                 @foreach (var overdue in Model)
                 {
+                    
+                       var overTime =  Math.Round((DateTime.Now - @overdue.DueDate).TotalDays);
+                    
                     <tr>
                         <td>@overdue.Book.Title</td>
                         <td>@overdue.User.FirstName @overdue.User.LastName</td>
                         <td>@overdue.RentalDate.ToString()</td>
-                        <td>@overdue.ReturnDate.Value.ToString()</td>
-                        <td>@DateTime.Now-@overdue.DueDate.ToString()</td>
-                        <td><a asp-area="" asp-action="Remind" asp-controller="Offer" asp-route-rentalId="@overdue.Id">Przypomnij</a></td>
+                        
+                        <td>@overTime</td>
+                        <td><input type="button" onclick="remind(@overdue.Id)" value="Przypomnij" /></td>
                     </tr>
                 }
             </tbody>
