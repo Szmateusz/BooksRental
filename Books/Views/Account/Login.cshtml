@@ -4,16 +4,6 @@
   
 }
 
-<div id="divlogin">
-    <ul class="list-unstyled components">
-         <li>
-            <a class="nav-link text-white" asp-area="" asp-controller="Account" asp-action="Index">Powrót</a>
-        </li>
-        <li>
-            <a class="nav-link text-white" asp-area="" asp-controller="Account" asp-action="Register">Rejestracja</a>
-        </li>
-    </ul>
-</div>
 
 @using (Html.BeginForm("Login", "Account", FormMethod.Post))
 {
@@ -23,7 +13,7 @@
 
     <span>Hasło: </span> @Html.PasswordFor(x => x.Password)
 
-    <img id="img" class="icon icon_pointer" src="~/lib/icons/unvisible.png" alt="toggle visible" onclick="togglePassword()" />
+    <img id="img" class="icon icon_pointer" src="~/icons/unvisible.png" alt="toggle visible" onclick="togglePassword()" />
 
     <input type="submit" value="Zaloguj" />
 }

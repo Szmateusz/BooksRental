@@ -45,8 +45,8 @@ namespace Books.Controllers
         [HttpPost]
         public IActionResult Search(SearchModel search)
         {
-            var books = _context.Books.Where(b => b.Title.Contains(search.SearchQuery) || 
-            b.Author.Contains(search.SearchQuery)).ToList();
+            var books = _context.Books.Where(b => b.Title.Contains(search.SearchQuery, StringComparison.OrdinalIgnoreCase) || 
+            b.Author.Contains(search.SearchQuery, StringComparison.OrdinalIgnoreCase)).ToList();
 
             if (!search.Genres.ToString().Equals("All"))
             {

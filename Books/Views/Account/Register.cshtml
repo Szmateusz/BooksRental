@@ -10,18 +10,6 @@
 
 
 }
-
-<div id="divlogin">
-    <ul class="list-unstyled components">
-        <li>
-            <a class="nav-link text-white" asp-area="" asp-controller="Account" asp-action="Index">Powrót</a>
-        </li>
-        <li>
-            <a class="nav-link text-white" asp-area="" asp-controller="Account" asp-action="Login">Zaloguj</a>
-        </li>
-    </ul>
-</div>
-
 @using (Html.BeginForm("Register", "Account", FormMethod.Post))
 {
     @Html.ValidationSummary();
@@ -29,7 +17,7 @@
     <span>Login: </span> @Html.TextBoxFor(x => x.UserName)
     <br />
     <span>Hasło: </span> @Html.PasswordFor(x => x.Password)
-    <img id="img" class="icon icon_pointer" src="~/lib/icons/unvisible.png" alt="toggle visible" onclick="togglePassword()" />
+    <img id="img" class="icon icon_pointer" src="~/icons/unvisible.png" alt="toggle visible" onclick="togglePassword()" />
     <br />
     <span>Imię: </span> @Html.TextBoxFor(x => x.FirstName)
     <br />

@@ -1,11 +1,24 @@
-﻿@model List<Rental>
+﻿@model AdminViewCurrentRentals
 
 @{
     Layout = "_LayoutAdmin";
 }
 
+
+<section class="sec_search">
+
+    @using (Html.BeginForm("ViewOverdueBooks", "Admin", FormMethod.Post))
+    {
+        @Html.TextBoxFor(x=>x.SearchQuery, new {placeholder = "Znajdź uzytkownika"})
+
+        <button type="submit">Szukaj</button>
+    }
+
+
+</section>
+
 <div class="card mt-3">
-    <div class="card-header">Wypożyczenia</div>
+    <div class="card-header">Wypożyczenia: @Model.Rentals.Count</div>
     <div class="card-body">
         <table class="table">
             <thead>
@@ -17,18 +30,22 @@
                 </tr>
             </thead>
             <tbody>
-                @foreach (var rental in Model)
+                @if(Model.Rentals != null)
                 {
-                    <tr>
-                        <td>@rental.Book.Title</td>
-                        <td>@rental.User.FullName</td>
-                        <td>@rental.RentalDate</td>
-                        <td>@rental.DueDate.ToShortDateString()</td>
-                        <td><input type="button" onclick="remind(@rental.Id)" value="Przypomnij" /></td>
+                      @foreach (var rental in Model.Rentals)
+                      {
+                            <tr>
+                                <td>@rental.Book.Title</td>
+                                <td>@rental.User.FullName</td>
+                                <td>@rental.RentalDate</td>
+                                <td>@rental.DueDate.ToShortDateString()</td>
+                                <td><input type="button" onclick="remind(@rental.Id)" value="Przypomnij" /></td>
 
 
-                    </tr>
+                            </tr>
+                      }
                 }
+              
             </tbody>
         </table>
     </div>

@@ -1,34 +1,50 @@
-﻿@model List<UserModel>
+﻿@model AdminViewUsers
 @{
     Layout = "_LayoutAdmin";
 }
 <h1>Lista użytkowników</h1>
 
-<div class="row">
-    <div class="col-md-12">
-        <table class="table table-striped">
-            <thead>
-                <tr>
-                    <th>Imię i nazwisko</th>
-                    <th>Email</th>
-                    <th>Akcje</th>
-                </tr>
-            </thead>
-            <tbody>
-                @foreach (var user in Model)
-                {
-                    <tr>
-                        <td>@user.FirstName @user.LastName</td>
-                        <td>@user.Email</td>
-                        <td>
-                            <a href="@Url.Action("EditUser", "Admin", new { id = user.Id })">Edytuj</a> |
-                            <a href="@Url.Action("DeleteUser", "Admin", new { id = user.Id })">Usuń</a>
-                            <a href="@Url.Action("ReturnBook", "Admin", new { userId = user.Id })">Zwróć ksiażki</a>
 
-                        </td>
+<section class="sec_search">
+
+    @using (Html.BeginForm("ViewUsers", "Admin", FormMethod.Post))
+    {
+        @Html.TextBoxFor(x=>x.SearchQuery, new {placeholder = "Znajdź uzytkownika"})
+
+        <button type="submit">Szukaj</button>
+    }
+
+
+</section>
+<div class="card">
+    <div class="card-header">Użytkownicy:  @Model.Users.Count</div>
+    <div class="card-body">
+            <table class="table table-striped">
+                <thead>
+                    <tr>
+                        <th>Imię i nazwisko</th>
+                        <th>Email</th>
+                        <th>Akcje</th>
                     </tr>
-                }
-            </tbody>
-        </table>
-    </div>
+                </thead>
+                <tbody>
+                    @if (Model.Users != null)
+                    {
+                        @foreach (var user in Model.Users)
+                        {
+                            <tr>
+                                <td>@user.FirstName @user.LastName</td>
+                                <td>@user.Email</td>
+                                <td>
+                                    <a href="@Url.Action("EditUser", "Admin", new { id = user.Id })">Edytuj</a> |
+                                    <a href="@Url.Action("DeleteUser", "Admin", new { id = user.Id })">Usuń</a>
+                                    <a href="@Url.Action("ReturnBook", "Admin", new { userId = user.Id })">Zwróć ksiażki</a>
+
+                                </td>
+                            </tr>
+                        }
+                    }
+                </tbody>
+            </table>
+        </div>
 </div>

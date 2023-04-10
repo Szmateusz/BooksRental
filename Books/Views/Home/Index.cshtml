@@ -18,60 +18,58 @@
 
 </section>
 
-<section class="slider">
-    <div class="slide_item">
-        <img src="" alt="item" />     
-    </div>
-</section>
 
 <section >
   
     <h2>Polecane książki:</h2>
-    <div>
-        <ul>
-                @if(Model.RecommendedBooks!=null){
-                    @foreach (var book in Model.RecommendedBooks)
-                    {
-                        <li>
-                            <div class="BookBox">
-                                <h3>@book.Title</h3>
-
-                                <p><img src="~/images/@book.Image"/></p>
-
-                                <p>@book.Author</p>
-                                <p>@book.Description</p>
-                                <p>@book.Publisher  -  @book.Year</p>
-                            </div>
-                        </li>
-                    }
-                }
+    <div class="bookContainer customScroll">
         
-        </ul>
+            @if (Model.LatestBooks != null)
+            {
+                @foreach (var book in Model.LatestBooks)
+                {
+                    
+                        <div class="bookBox">
+                            <div class="box2">
+                                <h3>@book.Title</h3>
+                                <p><img src="~/images/@book.Image" /></p>
+                            </div>
+                            <p><h4>@book.Author</h4></p>
+                            <p>@book.Description</p>
+                            <p>@book.Publisher  -  @book.Year</p>
+                        </div>
+                    
+                }
+            }
+        
     </div>
+
+
 </section>
 
 <section>
     
         <h2>Najnowsze książki:</h2>
-    <div>
-        <ul>
-            @if(Model.LatestBooks!=null){
+    <div class="bookContainer customScroll">
+
+        
+            @if (Model.LatestBooks != null)
+            {
                 @foreach (var book in Model.LatestBooks)
                 {
-                    <li>
-                        <div class="BookBox">
-                            <h3>@book.Title</h3>
-
-                            <p><img src="~/images/@book.Image" /></p>
-
-                            <p>@book.Author</p>
+                    
+                        <div class="bookBox">
+                            <div class="box2">
+                                <h3>@book.Title</h3>
+                                <p><img src="~/images/@book.Image" /></p>
+                            </div>
+                            <p><h4>@book.Author</h4></p>
                             <p>@book.Description</p>
                             <p>@book.Publisher  -  @book.Year</p>
                         </div>
-                    </li>
+                    
                 }
             }
-          
-        </ul>
+        
     </div>
 </section>

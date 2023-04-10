@@ -1,11 +1,25 @@
-﻿@model List<Book>
+﻿@model AdminViewBooksModel
 
 @{
     Layout = "_LayoutAdmin";
 }
+<section class="sec_search">
+
+    @using (Html.BeginForm("ViewBooks", "Admin", FormMethod.Post))
+    {
+        @Html.TextBoxFor(x=>x.SearchQuery, new {placeholder = "Wyszukaj książki"})
+
+
+        @Html.DropDownListFor(x => x.Genres, Html.GetEnumSelectList<Genres>(), "Wybierz gatunek")
+
+        <button type="submit">Szukaj</button>
+    }
+
+
+</section>
 
 <div class="card">
-    <div class="card-header">Książki</div>
+    <div class="card-header">Książki: @Model.Books.Count</div>
     <div class="card-body">
 
         <table class="table">
@@ -18,20 +32,24 @@
                 </tr>
             </thead>
             <tbody>
-                @foreach (var book in Model)
+                @if(Model.Books != null)
                 {
-                    <tr>
-                        <td>@book.Title</td>
-                        <td>@book.Author</td>
-                        <td>@(book.AvailableCopies > 0 ? book.AvailableCopies.ToString() : "Brak")</td>
-                        <td>
-                            <a asp-action="EditBook" asp-route-id="@book.Id">Edytuj</a>
-                            <a asp-action="DeleteBook" asp-route-id="@book.Id" onclick="return confirm('Czy na pewno chcesz usunąć tę książkę?')">Usuń</a>
-                            <a asp-action="BorrowBook" asp-route-bookId="@book.Id">Wypożycz</a>
+                       @foreach (var book in Model.Books)
+                       {
+                        <tr>
+                            <td>@book.Title</td>
+                            <td>@book.Author</td>
+                            <td>@(book.AvailableCopies > 0 ? book.AvailableCopies.ToString() : "Brak")</td>
+                            <td>
+                                <a asp-action="EditBook" asp-route-id="@book.Id">Edytuj</a>
+                                <a asp-action="DeleteBook" asp-route-id="@book.Id" onclick="return confirm('Czy na pewno chcesz usunąć tę książkę?')">Usuń</a>
+                                <a asp-action="BorrowBook" asp-route-bookId="@book.Id">Wypożycz</a>
 
-                        </td>
-                    </tr>
+                            </td>
+                        </tr>
+                       }
                 }
+             
             </tbody>
         </table>
     </div>

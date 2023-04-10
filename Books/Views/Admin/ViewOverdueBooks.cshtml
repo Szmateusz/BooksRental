@@ -1,11 +1,24 @@
-﻿@model List<Rental>
+﻿@model AdminViewOverdueBooks
 @{
     Layout = "_LayoutAdmin";
 }
 <h1>Lista książek z opóźnieniem w zwrocie</h1>
 
-<div class="row">
-    <div class="col-md-12">
+<section class="sec_search">
+
+    @using (Html.BeginForm("ViewOverdueBooks", "Admin", FormMethod.Post))
+    {
+        @Html.TextBoxFor(x=>x.SearchQuery, new {placeholder = "Znajdź uzytkownika"})
+
+        <button type="submit">Szukaj</button>
+    }
+
+
+</section>
+
+<div class="card">
+    <div class="card-header">Zaległych: @Model.Rentals.Count</div>
+    <div class="card-body">
         <table class="table table-striped">
             <thead>
                 <tr>
@@ -17,14 +30,14 @@
                 </tr>
             </thead>
             <tbody>
-                @foreach (var overdue in Model)
+                @foreach (var overdue in Model.Rentals)
                 {
                     
                        var overTime =  Math.Round((DateTime.Now - @overdue.DueDate).TotalDays);
                     
                     <tr>
                         <td>@overdue.Book.Title</td>
-                        <td>@overdue.User.FirstName @overdue.User.LastName</td>
+                        <td>@overdue.User.FullName</td>
                         <td>@overdue.RentalDate.ToString()</td>
                         
                         <td>@overTime</td>
