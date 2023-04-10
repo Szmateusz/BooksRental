@@ -36,12 +36,12 @@ namespace Books.Models
         }
         public IEnumerable<Rental> GetAllUserCurrentRentalBooks(string id)
         {
-            return _context.Rentals.Where(u => u.UserId.Equals(id)).Where(x=>x.ReturnDate>DateTime.Now).Include(b=>b.Book).ToList();
+            return _context.Rentals.Where(u => u.UserId.Equals(id)).Where(x=>x.DueDate > DateTime.Now).Include(b=>b.Book).ToList();
 
         }
         public IEnumerable<Rental> GetAllUserOverdueRentalBooks(string id)
         {
-            return _context.Rentals.Where(u => u.UserId.Equals(id)).Where(x=>x.DueDate<DateTime.Now).Include(b => b.Book).ToList();
+            return _context.Rentals.Where(u => u.UserId.Equals(id)).Where(x=>x.DueDate < DateTime.Now).Include(b => b.Book).ToList();
 
         }
 

@@ -3,30 +3,35 @@
 @{
 }
 
-<h1>@Model.Title</h1>
+<h1><i>@Model.Title</i></h1>
 <div>
     <img src="~/images/@Model.Image" alt="Book image" />
 </div>
 
 <div>
-    <h2>@Model.Author</h2>
-    <h3>@Model.Publisher --  @Model.Year</h3>
-    <h4>@Model.Genre</h4>
+    <h2>Autor: <i>@Model.Author</i></h2>
+    <h3>Wydawca: <i>@Model.Publisher --  @Model.Year</i></h3>
+    <h4>Gatunek: <i>@Model.Genre</i></h4>
 </div>
 <div>
-    <p>@Model.Description</p>
+    <p><b>Opis:</b><br />@Model.Description</p>
 </div>
 
 <div>
-    <span>Ilość książek: @Model.TotalCopies</span>
-    <span>Dostępna ilość: @Model.AvailableCopies</span>
+    <span><b>Ilość książek:</b> @Model.TotalCopies</span>
+    <span><b>Dostępna ilość:</b> @Model.AvailableCopies</span>
    
-      <input type="button"
-         value="Wypożycz"
+    
+    @if(Model.AvailableCopies > 0)
+    {
+        <input type="button"
+           value="Wypożycz"
            onclick="location.href='@Url.Action("Rent", "Offer", new {id = Model.Id})'" />
-
-    <input type="button"
+    }else{
+        <input type="button"
            value="Zarezeruj"
            onclick="location.href='@Url.Action("Reserve", "Offer", new {id = @Model.Id})'" />
+    }
+    
 </div>
 

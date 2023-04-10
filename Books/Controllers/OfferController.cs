@@ -85,6 +85,11 @@ namespace Books.Controllers
             var userId = _userManager.GetUserId(User);
             var book = _context.Books.SingleOrDefault(b => b.Id == id);
 
+            if (book == null)
+            {
+                return NotFound();
+            }
+
             if (book.AvailableCopies > 0)
             {
                 book.AvailableCopies += -1;
@@ -114,6 +119,11 @@ namespace Books.Controllers
             var userId = _userManager.GetUserId(User);
 
             var book = _context.Books.SingleOrDefault(b => b.Id == id);
+
+            if(book == null)
+            {
+                return NotFound();
+            }
 
             if (book.AvailableCopies < 1)
             {

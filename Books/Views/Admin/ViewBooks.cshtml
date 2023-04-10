@@ -25,6 +25,7 @@
         <table class="table">
             <thead>
                 <tr>
+                    <th></th>
                     <th>Tytuł</th>
                     <th>Autor</th>
                     <th>Dostępne egzemplarze</th>
@@ -37,13 +38,14 @@
                        @foreach (var book in Model.Books)
                        {
                         <tr>
+                            <td><a class="text-dark link" asp-area="" asp-controller="Offer" asp-action="Details" asp-route-id="@book.Id"><img src="~/images/@book.Image" alt="Book image" /></a></td>
                             <td>@book.Title</td>
                             <td>@book.Author</td>
                             <td>@(book.AvailableCopies > 0 ? book.AvailableCopies.ToString() : "Brak")</td>
                             <td>
-                                <a asp-action="EditBook" asp-route-id="@book.Id">Edytuj</a>
-                                <a asp-action="DeleteBook" asp-route-id="@book.Id" onclick="return confirm('Czy na pewno chcesz usunąć tę książkę?')">Usuń</a>
-                                <a asp-action="BorrowBook" asp-route-bookId="@book.Id">Wypożycz</a>
+                                <a class="link" asp-action="EditBook" asp-route-id="@book.Id">Edytuj</a>
+                                <a class="link" asp-action="DeleteBook" asp-route-id="@book.Id" onclick="return confirm('Czy na pewno chcesz usunąć tę książkę?')">Usuń</a>
+                                <a class="link" asp-action="BorrowBook" asp-route-bookId="@book.Id">Wypożycz</a>
 
                             </td>
                         </tr>

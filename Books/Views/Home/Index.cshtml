@@ -28,6 +28,7 @@
             {
                 @foreach (var book in Model.LatestBooks)
                 {
+                  <a class="text-dark" asp-area="" asp-controller="Offer" asp-action="Details" asp-route-id="@book.Id">
                     
                         <div class="bookBox">
                             <div class="box2">
@@ -38,6 +39,7 @@
                             <p>@book.Description</p>
                             <p>@book.Publisher  -  @book.Year</p>
                         </div>
+                  </a>
                     
                 }
             }
@@ -57,7 +59,7 @@
             {
                 @foreach (var book in Model.LatestBooks)
                 {
-                    
+                    <a class="text-dark" asp-area="" asp-controller="Offer" asp-action="Details" asp-route-id="@book.Id">
                         <div class="bookBox">
                             <div class="box2">
                                 <h3>@book.Title</h3>
@@ -67,7 +69,7 @@
                             <p>@book.Description</p>
                             <p>@book.Publisher  -  @book.Year</p>
                         </div>
-                    
+                    </a>
                 }
             }
         
