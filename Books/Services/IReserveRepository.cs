@@ -7,6 +7,8 @@ namespace Books.Services
         IEnumerable<Reserve> GetAllReserveBooks();
         IEnumerable<Reserve> GetAllUserReserveBooks(string id);
         Reserve GetReserveById(int id);
+        Reserve GetReserveByBookId(int id);
+
         void AddReserve(Reserve reserve);
         void UpdateReserve(Reserve reserve);
         void DeleteReserve(int id);

@@ -306,9 +306,15 @@ namespace Books.Controllers
             //Add avaible copie
 
             var book = rental.Book;
-            book.AvailableCopies += +1;
 
-            _bookRepository.UpdateBook(book);
+
+            if (!Powiadom(book.Id))
+            {
+                book.AvailableCopies += +1;
+
+                _bookRepository.UpdateBook(book);
+
+            }
 
 
             var result = $"Książka została zwrócona";
@@ -352,6 +358,31 @@ namespace Books.Controllers
             return NotFound();
            
         }
+
+        public bool Powiadom(int bookId)
+        {
+            var reserv = _reserveRepository.GetReserveByBookId(bookId);
+
+
+            if (reserv != null)
+            {
+                var user = reserv.User;
+               
+                var book = reserv.Book;
+
+
+                var emailSubject = "Zarezerwowana ksiażka";
+                var emailMessage = $"Zarezerwowana książka: \"{book.Title}\" przez klienta {user.FirstName} {user.LastName} została zwrócona , prosimy o jej odebranie!";
+
+                EmailSender.SendEmail(user.Email, emailSubject, emailMessage);
+
+                return true;
+                                  
+            }
+            return false;
+           
+        }
+
 
         [HttpGet]
         public IActionResult ViewRentalBooks()

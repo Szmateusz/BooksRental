@@ -26,6 +26,12 @@ namespace Books.Models
             return _context.Reserves.FirstOrDefault(c => c.Id == id);
         }
 
+        public Reserve GetReserveByBookId(int id)
+        {
+            return _context.Reserves.FirstOrDefault(x => x.BookId == id);
+        }
+         
+
         public void AddReserve(Reserve reserve)
         {
             _context.Reserves.Add(reserve);

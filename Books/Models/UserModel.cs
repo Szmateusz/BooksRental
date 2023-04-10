@@ -12,6 +12,8 @@ namespace Books.Models
         }
         public DateTime DateOfBirth { get; set; }
         public ICollection<Rental> Rentals { get; set; }
+        public ICollection<Reserve> Reserves { get; set; }
+
 
     }
 }
