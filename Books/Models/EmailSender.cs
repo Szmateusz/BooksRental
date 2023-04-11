@@ -9,9 +9,9 @@ namespace Books.Models
         {
             try
             {
-                var fromAddress = new MailAddress("warmachine3001wm@gmail.com", "Book Rental");
+                var fromAddress = new MailAddress("-->email<--", "Book Rental");
                 var toAddress = new MailAddress(email);
-                const string fromPassword = "aslfraaxhvbggcrs";
+                const string fromPassword = "-->password<--";
                 const string smtpHost = "smtp.gmail.com";
                 const int smtpPort = 587;
 
