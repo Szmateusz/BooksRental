@@ -30,6 +30,31 @@ namespace Books.Controllers
             return View(model);
         }
 
+        public IActionResult About() {
+
+            return View();
+        }
+        [HttpGet]
+        public IActionResult Contact()
+        {
+
+            return View();
+        }
+        [HttpPost]
+        public IActionResult Contact(ContactViewModel model)
+        {
+            if (!ModelState.IsValid)
+            {
+                TempData["ErrorMessage"] = "Wystąpił błąd podczas wysyłania wiadomości.";
+
+                return View(model);
+            }
+
+            TempData["SuccessMessage"] = "Wiadomość została wysłana.";
+
+            return View();
+
+        }
     }
 }
 

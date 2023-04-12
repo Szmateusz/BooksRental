@@ -5,38 +5,53 @@
     ViewData["Title"] = "Rejestracja";
     
 
-    var isRegistered = ViewData["isRegistered"];
-    var isPasswordLenght = ViewData["isPasswordLenght"];
-
 
 }
 @using (Html.BeginForm("Register", "Account", FormMethod.Post))
 {
     @Html.ValidationSummary();
-    
-    <span>Login: </span> @Html.TextBoxFor(x => x.UserName)
-    <br />
-    <span>Hasło: </span> @Html.PasswordFor(x => x.Password)
+
+    <div class="form-group">
+        @Html.LabelFor(m => m.UserName)
+        @Html.TextBoxFor(m => m.UserName, new { @class = "form-control" })
+        @Html.ValidationMessageFor(m => m.UserName, "", new { @class = "text-danger" })
+    </div>
+
+    <div class="form-group">
+        @Html.LabelFor(m => m.Password)
+        @Html.PasswordFor(m => m.Password, new { @class = "form-control" ,@type="password"})
+        @Html.ValidationMessageFor(m => m.Password, "", new { @class = "text-danger" })
+    </div>
+
+
     <img id="img" class="icon icon_pointer" src="~/icons/unvisible.png" alt="toggle visible" onclick="togglePassword()" />
-    <br />
-    <span>Imię: </span> @Html.TextBoxFor(x => x.FirstName)
-    <br />
+
+    <div class="form-group">
+        @Html.LabelFor(m => m.FirstName)
+        @Html.TextBoxFor(m => m.FirstName, new { @class = "form-control" })
+        @Html.ValidationMessageFor(m => m.FirstName, "", new { @class = "text-danger" })
+    </div>
+
+
+    <div class="form-group">
+        @Html.LabelFor(m => m.LastName)
+        @Html.TextBoxFor(m => m.LastName, new { @class = "form-control" })
+        @Html.ValidationMessageFor(m => m.LastName, "", new { @class = "text-danger" })
+    </div>
     
-    <span>Nazwisko: </span> @Html.TextBoxFor(x => x.LastName)
-    <br />
-    <span>Email: </span> @Html.TextBoxFor(x => x.Email)
-    <br />
+     <div class="form-group">
+        @Html.LabelFor(m => m.Email)
+        @Html.TextBoxFor(m => m.Email, new { @class = "form-control" })
+        @Html.ValidationMessageFor(m => m.Email, "", new { @class = "text-danger" })
+    </div>
 
     <span>Data urodzenia: </span> <input asp-for="@Model.DateOfBirth" type="date" asp-format="{0:yyyy-MM-dd}" /> 
     <br />
 
     <input type="submit" value="Zarejestruj" />
 }
-@if (isRegistered.Equals(true))
+
+@if (TempData.ContainsKey("ErrorMessage"))
 {
-    <p class="adultInfo">Użytkownik, o tym loginie juz istnieje!</p>
-}
-@if (isPasswordLenght.Equals(false))
-{
-    <p class="adultInfo">Hasło musi zawierać conajmniej 5 znaków!</p>
+    <div class="alert alert-danger">@TempData["ErrorMessage"]</div>
 }

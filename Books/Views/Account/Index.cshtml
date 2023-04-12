@@ -1,1 +1,4 @@
-﻿
+﻿@if (TempData.ContainsKey("ErrorMessage"))
+{
+    <div class="alert alert-danger">@TempData["ErrorMessage"]</div>
+}

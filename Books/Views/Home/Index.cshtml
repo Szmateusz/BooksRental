@@ -22,14 +22,17 @@
 <section >
   
     <h2>Polecane książki:</h2>
-    <div class="bookContainer customScroll">
-        
+    <div class="bookBody">
+
+        <div class="arrow" onclick="recommendArrow('right')"><</div>
+        <div id="recommendBooks" class="bookContainer customScroll">
+
             @if (Model.LatestBooks != null)
             {
                 @foreach (var book in Model.LatestBooks)
                 {
-                  <a class="text-dark" asp-area="" asp-controller="Offer" asp-action="Details" asp-route-id="@book.Id">
-                    
+                    <a class="text-dark" asp-area="" asp-controller="Offer" asp-action="Details" asp-route-id="@book.Id">
+
                         <div class="bookBox">
                             <div class="box2">
                                 <h3>@book.Title</h3>
@@ -39,22 +42,27 @@
                             <p>@book.Description</p>
                             <p>@book.Publisher  -  @book.Year</p>
                         </div>
-                  </a>
-                    
+                    </a>
+
                 }
             }
-        
+
+        </div>
+        <div class="arrow" onclick="recommendArrow('left')">></div>
+
     </div>
-
-
+  
 </section>
 
 <section>
     
         <h2>Najnowsze książki:</h2>
-    <div class="bookContainer customScroll">
+    <div class="bookBody">
+        <div class="arrow" onclick="newestArrow('right')"><</div>
 
-        
+        <div id="newestBooks" class="bookContainer  customScroll">
+
+
             @if (Model.LatestBooks != null)
             {
                 @foreach (var book in Model.LatestBooks)
@@ -72,6 +80,11 @@
                     </a>
                 }
             }
-        
+
+        </div>
+
+        <div class="arrow" onclick="newestArrow('left')">></div>
+
     </div>
+   
 </section>

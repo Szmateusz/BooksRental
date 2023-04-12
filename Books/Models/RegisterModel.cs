@@ -4,23 +4,32 @@ namespace Books.Models
 {
     public class RegisterModel
     {
-        [Required]
+        [Display(Name = "Login")]
+        [Required(ErrorMessage = "Pole  'Nazwa Użytkownika' jest wymagane")]
+        [StringLength(30, ErrorMessage = "Pole 'Nazwa uzytkownika' może mieć maksymalnie 30 znaków.")]
         public string UserName { get; set; }
 
-        [Required]
+        [Display(Name = "Imię")]
+        [Required(ErrorMessage = "Pole 'Imię' jest wymagane")]
+        [StringLength(30, ErrorMessage = "Pole 'Imię' może mieć maksymalnie 30 znaków.")]
         public string FirstName { get; set; }
 
-        [Required]
+        [Display(Name = "Nazwisko")]
+        [Required(ErrorMessage = "Pole 'Nazwisko'jest wymagane.")]
+        [StringLength(30, ErrorMessage = "Pole 'Nazwisko' może mieć maksymalnie 30 znaków.")]
         public string LastName { get; set; }
 
-        [Required]
+        [Required(ErrorMessage = "Pole 'Adres e-mail' jest wymagane.")]
+        [EmailAddress(ErrorMessage = "Pole 'Adres e-mail' musi być prawidłowym adresem e-mail.")]
         public string Email { get; set; }
 
-
-        [Required]
+        [Display(Name = "Hasło")]
+        [Required(ErrorMessage = "Pole 'hasło' jest wymagane.")]
+        [StringLength(30, ErrorMessage = "Pole 'hasło' może mieć maksymalnie 30 znaków.")]
         public string Password { get; set; }
 
-        [Required]
+        [Display(Name = "Data urodzenia")]
+        [Required(ErrorMessage = "Pole 'Data urodzenia' jest wymagane.")]
         public DateTime DateOfBirth { get; set; }
     }
 }

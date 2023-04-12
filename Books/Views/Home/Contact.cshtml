@@ -1,0 +1,34 @@
+﻿@model ContactViewModel
+
+@using (Html.BeginForm("Contact", "Home", FormMethod.Post))
+{
+    <div class="form-group">
+        @Html.LabelFor(m => m.Name)
+        @Html.TextBoxFor(m => m.Name, new { @class = "form-control" })
+        @Html.ValidationMessageFor(m => m.Name, "", new { @class = "text-danger" })
+    </div>
+    <div class="form-group">
+        @Html.LabelFor(m => m.Email)
+        @Html.TextBoxFor(m => m.Email, new { @class = "form-control" })
+        @Html.ValidationMessageFor(m => m.Email, "", new { @class = "text-danger" })
+    </div>
+    <div class="form-group">
+        @Html.LabelFor(m => m.Subject)
+        @Html.TextBoxFor(m => m.Subject, new { @class = "form-control" })
+        @Html.ValidationMessageFor(m => m.Subject, "", new { @class = "text-danger" })
+    </div>
+    <div class="form-group">
+        @Html.LabelFor(m => m.Message)
+        @Html.TextAreaFor(m => m.Message, new { @class = "form-control", rows = "5" })
+        @Html.ValidationMessageFor(m => m.Message, "", new { @class = "text-danger" })
+    </div>
+    <button type="submit" class="btn btn-primary">Wyślij</button>
+}
+@if (TempData.ContainsKey("SuccessMessage"))
+{
+    <div class="alert alert-success">@TempData["SuccessMessage"]</div>
+}
+@if (TempData.ContainsKey("ErrorMessage"))
+{
+    <div class="alert alert-danger">@TempData["ErrorMessage"]</div>
+}

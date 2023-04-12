@@ -124,11 +124,30 @@ img.logo{
 
 .bookContainer {
    
-    width: 1005;
-    overflow-x: scroll;
+    width: 100%;
+    overflow-x:hidden;
     white-space: nowrap;
 }
+.bookBody{
+    display:flex;
+}
+.arrow {
+    font-size:24px;
+    font-weight:bold;
+    background-color:lightblue;
+    height: 100%;
+    padding:5px;
+    margin-top: auto;
+    margin-bottom: auto;
 
+    border:1px solid black;
+    border-radius:100%;
+
+    cursor:grab;
+}
+.arrow:hover{
+    filter:brightness(80%);
+}
 
 /*------------SCROLL-------*/
 .customScroll::-webkit-scrollbar {

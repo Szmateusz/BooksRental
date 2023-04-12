@@ -4,10 +4,13 @@ namespace Books.Models
 {
     public class LoginModel
     {
-
-        [Required]
+        [Display(Name = "Login")]
+        [Required(ErrorMessage = "Pole  'Nazwa Użytkownika' jest wymagane")]
         public string UserName { get; set; }
-        [Required]
+
+
+        [Display(Name = "Hasło")]
+        [Required(ErrorMessage = "Pole 'hasło' jest wymagane.")]
         public string Password { get; set; }
     }
 }
