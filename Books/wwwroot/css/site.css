@@ -132,21 +132,21 @@ img.logo{
     display:flex;
 }
 .arrow {
-    font-size:24px;
+    font-size:30px;
     font-weight:bold;
-    background-color:lightblue;
+   
     height: 100%;
     padding:5px;
     margin-top: auto;
     margin-bottom: auto;
 
-    border:1px solid black;
-    border-radius:100%;
+   
 
     cursor:grab;
 }
 .arrow:hover{
     filter:brightness(80%);
+    background-color:ghostwhite;
 }
 
 /*------------SCROLL-------*/
