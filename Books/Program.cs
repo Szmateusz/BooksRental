@@ -3,12 +3,18 @@ using Books.Models;
 using Books.Services;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
 
 var builder = WebApplication.CreateBuilder(args);
+
+builder.Services.Configure<EmailSettings>(builder.Configuration.GetSection("EmailSettings"));
 
 builder.Services.AddScoped<IBookRepository, BookRepository>();
 builder.Services.AddScoped<IRentalRepository, RentalRepository>();
 builder.Services.AddScoped<IReserveRepository, ReserveRepository>();
+builder.Services.AddScoped<EmailSender>();
+
+
 
 
 builder.Services.AddDbContext<Books.DbContext>(options =>

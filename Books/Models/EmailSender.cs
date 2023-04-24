@@ -1,19 +1,25 @@
-﻿using System.Net;
+﻿using Microsoft.Extensions.Options;
+using System.Net;
 using System.Net.Mail;
 
 namespace Books.Models
 {
     public class EmailSender
     {
-        public static bool SendEmail(string email, string subject, string message)
+        public readonly EmailSettings _emailSettings;
+        public EmailSender(IOptions<EmailSettings> emailSettings) { 
+            _emailSettings = emailSettings.Value;
+        }
+
+        public  bool SendEmail(string email, string subject, string message)
         {
             try
             {
-                var fromAddress = new MailAddress("-->email<--", "Book Rental");
+                var fromAddress = new MailAddress(_emailSettings.FromAddress, "Book Rental");
                 var toAddress = new MailAddress(email);
-                const string fromPassword = "-->password<--";
-                const string smtpHost = "smtp.gmail.com";
-                const int smtpPort = 587;
+                string fromPassword =_emailSettings.FromPassword;
+                string smtpHost = _emailSettings.SmtpHost;
+                int smtpPort = _emailSettings.SmtpPort;
 
                 var smtp = new SmtpClient
                 {

@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.DependencyInjection;
 
 
 namespace Books.Controllers
@@ -18,7 +19,8 @@ namespace Books.Controllers
         private readonly IReserveRepository _reserveRepository;
         public readonly DbContext _context;
 
-        public AdminController(IBookRepository bookRepository, IRentalRepository rentalRepository, DbContext context, IReserveRepository reserveRepository, Microsoft.AspNetCore.Hosting.IHostingEnvironment hostingEnvironment,UserManager<UserModel> usermanager)
+        public readonly EmailSender _emailSender;
+        public AdminController(IBookRepository bookRepository, IRentalRepository rentalRepository, DbContext context, IReserveRepository reserveRepository, Microsoft.AspNetCore.Hosting.IHostingEnvironment hostingEnvironment,UserManager<UserModel> usermanager,EmailSender emailSender)
         {
             _bookRepository = bookRepository;
             _rentalRepository = rentalRepository;
@@ -26,6 +28,7 @@ namespace Books.Controllers
             _reserveRepository = reserveRepository;
             _hostingEnvironment = hostingEnvironment;   
             _usermanager = usermanager;
+            _emailSender = emailSender;
         }
 
         public IActionResult Index()
@@ -336,7 +339,7 @@ namespace Books.Controllers
                 var emailSubject = "Przypomnienie o zwrocie książki";
                 var emailMessage = $"Wypożyczenie książki \"{book.Title}\" przez klienta {user.FirstName} {user.LastName} minęło {Math.Round((DateTime.Now - rental.DueDate).TotalDays)} dni temu termin zwrotu był na {rental.DueDate.ToString("dd-MM-yyyy")} . Prosimy o jak najszybszy zwrot książki.";
 
-                if(EmailSender.SendEmail(user.Email, emailSubject, emailMessage))
+                if(_emailSender.SendEmail(user.Email, emailSubject, emailMessage))
                 {
                     var result = $"Email do {user.FirstName} {user.LastName} został wysłany";
 
@@ -374,7 +377,7 @@ namespace Books.Controllers
                 var emailSubject = "Zarezerwowana ksiażka";
                 var emailMessage = $"Zarezerwowana książka: \"{book.Title}\" przez klienta {user.FirstName} {user.LastName} została zwrócona , prosimy o jej odebranie!";
 
-                EmailSender.SendEmail(user.Email, emailSubject, emailMessage);
+                _emailSender.SendEmail(user.Email, emailSubject, emailMessage);             
 
                 return true;
                                   
