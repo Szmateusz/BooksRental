@@ -28,40 +28,30 @@ namespace Books.Controllers
         }
 
         [HttpGet]
-        public IActionResult Index()
+        public IActionResult Index(SearchModel? search)
         {
-            var books = _context.Books.ToList();
 
-            var model = new OfferViewModel
+            var books = _bookRepository.GetAllBooks();
+
+            if (!string.IsNullOrEmpty(search.SearchQuery))
             {
-                Books = books,
-                SearchQuery = ""
-            };
-
-            return View(model);
-           
-        }
-
-        [HttpPost]
-        public IActionResult Search(SearchModel search)
-        {
-            var books = _context.Books.Where(b => b.Title.Contains(search.SearchQuery, StringComparison.OrdinalIgnoreCase) || 
-            b.Author.Contains(search.SearchQuery, StringComparison.OrdinalIgnoreCase)).ToList();
+                books = books.Where(b => b.Title.Contains(search.SearchQuery, StringComparison.OrdinalIgnoreCase) ||
+               b.Author.Contains(search.SearchQuery, StringComparison.OrdinalIgnoreCase)).ToList();
+            }
 
             if (!search.Genres.ToString().Equals("All"))
             {
-                books = books.Where(b => b.Genre.Equals(search.Genres.ToString())).ToList();
+                books = books.Where(b => b.Genre.Equals(search.Genres)).ToList();
             }
 
             var model = new OfferViewModel
             {
-               
-                Books = books,
-                SearchQuery = search.SearchQuery
-              
+                Books = books.ToList(),
+                SearchQuery = search.SearchQuery ?? ""
             };
-            return View("Index",model);
-            
+
+            return View(model);
+           
         }
 
         public IActionResult Details(int id)

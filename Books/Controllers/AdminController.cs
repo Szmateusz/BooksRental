@@ -35,24 +35,11 @@ namespace Books.Controllers
         {
             return View();
         }
+
         [HttpGet]
-        public IActionResult ViewCurrentRentals()
+        public IActionResult ViewCurrentRentals(AdminViewCurrentRentals? search)
         {
            
-            var rentals = _rentalRepository.GetAllCurrentRentalBooks().ToList();
-
-            var model = new AdminViewCurrentRentals
-            {
-                Rentals = rentals,
-                SearchQuery = ""
-            };
-           
-            return View(model);
-        }
-        [HttpPost]
-        public IActionResult ViewCurrentRentals(AdminViewCurrentRentals search)
-        {
-
             var rentals = _rentalRepository.GetAllCurrentRentalBooks().ToList();
 
             if (!string.IsNullOrEmpty(search.SearchQuery))
@@ -66,59 +53,39 @@ namespace Books.Controllers
             var model = new AdminViewCurrentRentals
             {
                 Rentals = rentals,
-                SearchQuery = search.SearchQuery
+                SearchQuery = search.SearchQuery ?? ""
             };
-
+           
             return View(model);
         }
-
-
 
         [HttpGet]
-        public IActionResult ViewBooks()
+        public IActionResult ViewBooks(AdminViewBooksModel? search)
         {
-            var books = _bookRepository.GetAllBooks().ToList();
+            var books = _bookRepository.GetAllBooks();
 
-            var model = new AdminViewBooksModel
-            {
-
-                Books = books,
-                SearchQuery = ""
-
-            };
-
-            return View(model);
-        }
-        [HttpPost]
-        public IActionResult ViewBooks(AdminViewBooksModel search)
-        {
-
-            var books = _bookRepository.GetAllBooks().ToList();
-
-            if(!string.IsNullOrEmpty(search.SearchQuery))
+            if (!string.IsNullOrEmpty(search.SearchQuery))
             {
                 books = books.Where(b => b.Title.Contains(search.SearchQuery, StringComparison.OrdinalIgnoreCase) ||
                b.Author.Contains(search.SearchQuery, StringComparison.OrdinalIgnoreCase)).ToList();
             }
-           
+
             if (!search.Genres.ToString().Equals("All"))
             {
-                books = books.Where(b => b.Genre.Equals(search.Genres.ToString())).ToList();
+                books = books.Where(b => b.Genre.Equals(search.Genres)).ToList();
             }
 
             var model = new AdminViewBooksModel
             {
 
-                Books = books,
-                SearchQuery = search.SearchQuery
+                Books = books.ToList(),
+                SearchQuery = search.SearchQuery ?? ""
 
             };
 
             return View(model);
         }
-
-
-
+        
         public IActionResult AddBook()
         {
             return View();
@@ -181,52 +148,35 @@ namespace Books.Controllers
             return RedirectToAction("Index");
         }
 
-        
+        [HttpGet]
         public IActionResult OverdueRentals()
         {
             var rentals = _rentalRepository.GetAllOverdueRentalBooks().ToList();
 
             return View(rentals);
         }
+
         [HttpGet]
-        public IActionResult ViewUsers()
-        {
-            var users = _context.Users.ToList();
-
-            var model = new AdminViewUsers
-            {
-                Users = users,
-                SearchQuery = ""
-            };
-
-            return View(model);
-        }
-        [HttpPost]
-        public IActionResult ViewUsers(AdminViewUsers search)
+        public IActionResult ViewUsers(AdminViewUsers? search)
         {
             var users = _context.Users.ToList();
 
             if (!string.IsNullOrEmpty(search.SearchQuery))
             {
-               users = users.Where(b => b.FirstName.Contains(search.SearchQuery, StringComparison.OrdinalIgnoreCase) ||
-                b.FirstName.Contains(search.SearchQuery, StringComparison.OrdinalIgnoreCase) ||
-               b.Email.Contains(search.SearchQuery, StringComparison.OrdinalIgnoreCase)).ToList();
+                users = users.Where(b => b.FirstName.Contains(search.SearchQuery, StringComparison.OrdinalIgnoreCase) ||
+                 b.FirstName.Contains(search.SearchQuery, StringComparison.OrdinalIgnoreCase) ||
+                b.Email.Contains(search.SearchQuery, StringComparison.OrdinalIgnoreCase)).ToList();
             }
-
-         
 
             var model = new AdminViewUsers
             {
-
                 Users = users,
-                SearchQuery = search.SearchQuery
-
+                SearchQuery = search.SearchQuery ?? ""
             };
 
             return View(model);
-
         }
-
+        
         [HttpGet]
         public IActionResult BorrowBook(int bookId)
         {
@@ -388,24 +338,9 @@ namespace Books.Controllers
 
 
         [HttpGet]
-        public IActionResult ViewRentalBooks()
-        {
-            var rentals = _rentalRepository.GetAllRentalBooks().Where(x=>x.ReturnDate != null).ToList();
-
-            var model = new AdminViewRentalBooks
-            {
-                Rentals = rentals,
-                SearchQuery = ""
-            };
-
-            return View(model);
-
-        }
-        [HttpPost]
         public IActionResult ViewRentalBooks(AdminViewRentalBooks search)
         {
-            var rentals = _rentalRepository.GetAllRentalBooks().Where(x => x.ReturnDate != null).ToList();
-
+            var rentals = _rentalRepository.GetAllRentalBooks().Where(x=>x.ReturnDate != null).ToList();
 
             if (!string.IsNullOrEmpty(search.SearchQuery))
             {
@@ -418,13 +353,13 @@ namespace Books.Controllers
             var model = new AdminViewRentalBooks
             {
                 Rentals = rentals,
-                SearchQuery = search.SearchQuery
+                SearchQuery = search.SearchQuery ?? ""
             };
 
             return View(model);
 
         }
-
+       
         public IActionResult ViewReservedBooks()
         {
            var model = _reserveRepository.GetAllReserveBooks().ToList();
@@ -439,40 +374,26 @@ namespace Books.Controllers
         }
 
         [HttpGet]
-        public IActionResult ViewOverdueBooks()
+        public IActionResult ViewOverdueBooks(AdminViewOverdueBooks? search)
         {
-            var rentals = _rentalRepository.GetAllOverdueRentalBooks().ToList();
-
-            var model = new AdminViewOverdueBooks
-            {
-                Rentals = rentals,
-                SearchQuery = ""
-            };
-            return View(model);
-        }
-        [HttpPost]
-        public IActionResult ViewOverdueBooks(AdminViewOverdueBooks search)
-        {
-            var rentals = _rentalRepository.GetAllOverdueRentalBooks().ToList();
-
+            var rentals = _rentalRepository.GetAllOverdueRentalBooks();
 
             if (!string.IsNullOrEmpty(search.SearchQuery))
             {
                 rentals = rentals.Where(b => b.Book.Title.Contains(search.SearchQuery, StringComparison.OrdinalIgnoreCase) ||
                  b.User.FirstName.Contains(search.SearchQuery, StringComparison.OrdinalIgnoreCase) ||
                  b.User.LastName.Contains(search.SearchQuery, StringComparison.OrdinalIgnoreCase) ||
-                b.User.Email.Contains(search.SearchQuery, StringComparison.OrdinalIgnoreCase)).ToList();
+                b.User.Email.Contains(search.SearchQuery, StringComparison.OrdinalIgnoreCase));
             }
 
             var model = new AdminViewOverdueBooks
             {
-                Rentals = rentals,
-                SearchQuery = search.SearchQuery
+                Rentals = rentals.ToList(),
+                SearchQuery = search.SearchQuery ?? ""
             };
-
             return View(model);
         }
-
+        
         [HttpGet]
         public IActionResult EditUser(string userId)
         {

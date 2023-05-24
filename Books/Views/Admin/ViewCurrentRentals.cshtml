@@ -7,7 +7,7 @@
 
 <section class="sec_search">
 
-    @using (Html.BeginForm("ViewOverdueBooks", "Admin", FormMethod.Post))
+    @using (Html.BeginForm("ViewOverdueBooks", "Admin", FormMethod.Get))
     {
         @Html.TextBoxFor(x=>x.SearchQuery, new {placeholder = "Znajdź uzytkownika"})
 

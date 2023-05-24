@@ -5,7 +5,7 @@
 
 <section class="sec_search">
 
-    @using (Html.BeginForm("Search", "Offer", FormMethod.Post))
+    @using (Html.BeginForm("Index", "Offer", FormMethod.Get))
     {
         @Html.TextBoxFor(x=>x.SearchQuery, new {placeholder = "Wyszukaj książki"})
 
